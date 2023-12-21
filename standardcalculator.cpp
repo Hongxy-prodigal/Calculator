@@ -102,6 +102,8 @@ void StandardCalculator::btnNumClicked()
 void StandardCalculator::on_btnPeriod_clicked()
 {
     if (!operand.contains('.')) {
+        if (operand == "")
+            operand = "0";
         operand += '.';
         if (operands != "" && codes != "")
             ui->display->setText(operands + codes + operand);

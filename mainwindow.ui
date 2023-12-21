@@ -6,12 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>555</width>
-    <height>666</height>
+    <width>600</width>
+    <height>767</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>:/image/app.ico</normaloff>:/image/app.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -74,12 +78,20 @@
               <property name="text">
                <string>重量</string>
               </property>
+              <property name="icon">
+               <iconset resource="calculator.qrc">
+                <normaloff>:/image/weight.png</normaloff>:/image/weight.png</iconset>
+              </property>
              </widget>
             </item>
             <item row="9" column="0">
              <widget class="QPushButton" name="btnCurrency">
               <property name="text">
                <string>货币</string>
+              </property>
+              <property name="icon">
+               <iconset resource="calculator.qrc">
+                <normaloff>:/image/currency.png</normaloff>:/image/currency.png</iconset>
               </property>
              </widget>
             </item>
@@ -88,12 +100,20 @@
               <property name="text">
                <string>绘图</string>
               </property>
+              <property name="icon">
+               <iconset resource="calculator.qrc">
+                <normaloff>:/image/painting.png</normaloff>:/image/painting.png</iconset>
+              </property>
              </widget>
             </item>
             <item row="6" column="0">
              <widget class="QPushButton" name="btnDate">
               <property name="text">
                <string>日期计算</string>
+              </property>
+              <property name="icon">
+               <iconset resource="calculator.qrc">
+                <normaloff>:/image/date.png</normaloff>:/image/date.png</iconset>
               </property>
              </widget>
             </item>
@@ -115,12 +135,20 @@
               <property name="text">
                <string>容量</string>
               </property>
+              <property name="icon">
+               <iconset resource="calculator.qrc">
+                <normaloff>:/image/volume.png</normaloff>:/image/volume.png</iconset>
+              </property>
              </widget>
             </item>
             <item row="4" column="0">
              <widget class="QPushButton" name="btnProgram">
               <property name="text">
                <string>程序员</string>
+              </property>
+              <property name="icon">
+               <iconset resource="calculator.qrc">
+                <normaloff>:/image/program.png</normaloff>:/image/program.png</iconset>
               </property>
              </widget>
             </item>
@@ -129,12 +157,20 @@
               <property name="text">
                <string>科学</string>
               </property>
+              <property name="icon">
+               <iconset resource="calculator.qrc">
+                <normaloff>:/image/scientific.png</normaloff>:/image/scientific.png</iconset>
+              </property>
              </widget>
             </item>
             <item row="2" column="0">
              <widget class="QPushButton" name="btnStandard">
               <property name="text">
                <string>标准</string>
+              </property>
+              <property name="icon">
+               <iconset resource="calculator.qrc">
+                <normaloff>:/image/standard.png</normaloff>:/image/standard.png</iconset>
               </property>
              </widget>
             </item>
@@ -145,6 +181,10 @@
              <widget class="QPushButton" name="pushButton_9">
               <property name="text">
                <string>长度</string>
+              </property>
+              <property name="icon">
+               <iconset resource="calculator.qrc">
+                <normaloff>:/image/length.png</normaloff>:/image/length.png</iconset>
               </property>
              </widget>
             </item>
@@ -185,13 +225,15 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>555</width>
+     <width>600</width>
      <height>26</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="calculator.qrc"/>
+ </resources>
  <connections/>
 </ui>
