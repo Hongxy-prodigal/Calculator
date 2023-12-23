@@ -19,20 +19,25 @@ public:
     explicit ScientificCalculator(QWidget *parent = nullptr);
     ~ScientificCalculator();
 
-    QStack<QString> operands;
-    QStack<QString> codes;
-    QString operand;
-    QString code;
+    QStack<QString> operands;   //存储操作数
+    QStack<QString> codes;      //存储操作符
+    QString operand;            //当前的操作数
+    QString code;               //当前的操作符
 //    QString operands;
 //    QString codes;
     QMap<int, QPushButton *> keyBtns;
     QMap<int, QPushButton *> operatorBtns;
     QString calculation();
+    //入栈
+    void pushCode(const QString &code);
+    int comparePriority(QString c);
+    //出栈
+    void popCode(const QString &code);
 
 private:
     Ui::ScientificCalculator *ui;
-    int Change = 0;
-    int Clear = 0;
+    int Change = 0;         //变换按键
+    int Bracket = 0;    //括号
 
 private slots:
     void on_btnNd_clicked();
@@ -43,8 +48,9 @@ private slots:
     void on_btnSign_clicked();
     void btnOperatorClicked();
 //    void on_btnEqual_clicked();
-//    void btnUniOperatorClicked();
+    void btnUniOperatorClicked();
     void keyPressEvent(QKeyEvent *event);
+    void on_display_textChanged(const QString &arg1);   //变换C CE
 };
 
 #endif // SCIENTIFICCALCULATOR_H
