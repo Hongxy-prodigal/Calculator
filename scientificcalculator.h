@@ -33,11 +33,14 @@ public:
     int comparePriority(QString c);
     //出栈
     void popCode(const QString &code);
+    //去除到操作数
+    void removeOperand();
 
 private:
     Ui::ScientificCalculator *ui;
     int Change = 0;         //变换按键
     int Bracket = 0;    //括号
+    int have = 0;        //当前的操作数是否已经被但操作数运算了
 
 private slots:
     void on_btnNd_clicked();

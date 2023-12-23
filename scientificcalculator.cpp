@@ -90,6 +90,12 @@ void ScientificCalculator::on_btnNd_clicked()
 //数字键
 void ScientificCalculator::btnNumClicked()
 {
+    if (have == 1) {
+        have = 0;
+        removeOperand();
+        operand = "";
+        ui->display->setText(operand);
+    }
     QString digit = qobject_cast<QPushButton *>(sender())->text();
     if (digit == "e")
         digit = QString::number(M_E);
@@ -110,6 +116,7 @@ void ScientificCalculator::btnNumClicked()
     }
     ui->display->setText(str + digit);
     qDebug() << (digit + " btn click");
+
 }
 
 //小数点
@@ -300,16 +307,18 @@ void ScientificCalculator::btnUniOperatorClicked()
         }
     }
     //判断当前数字是结果还是操作数
-    if (operand == "") {
-//        //根据是否为等号运算
-//        operands = QString::number(result);
-//        ui->display->setText(operands);
+    if (operand == "" && ui->addDisplay->text().right(1) == "=") {
+        ui->addDisplay->setText(temp);
     } else {
-        operand = QString::number(result);
         ui->addDisplay->setText(str + temp);
-        ui->display->setText(operand);
     }
+    operand = QString::number(result);
+    ui->display->setText(operand);
+    have = 1;
 }
+
+//对应去除
+
 
 //键盘事件
 void ScientificCalculator::keyPressEvent(QKeyEvent *event)
@@ -367,10 +376,23 @@ int ScientificCalculator::comparePriority(QString c)
 {
     if (c == "+" || c == "-")
         return 1;
-    else if (c == "*" || c == "/")
+    else if (c == "*" || c == "/" || c == "mod")
         return 2;
     else
         return 0;
+}
+
+void ScientificCalculator::removeOperand()
+{
+    QStringList operators = {"+", "-", "*", "/", "mod"}; // 所有可能的运算符
+    int index = -1;
+    QString str = ui->addDisplay->text();
+    for (const QString &op : operators) {
+        int temp = str.lastIndexOf(op);
+        index = index >  temp ? index : temp;
+    }
+    str = str.left(index + 1);
+    ui->addDisplay->setText(str);
 }
 
 QString ScientificCalculator::calculation()
