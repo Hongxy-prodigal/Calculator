@@ -29,7 +29,7 @@ public:
     QMap<int, QPushButton *> operatorBtns;
     QString calculation();
     //入栈
-    void pushCode(const QString &code);
+    void pushCode(const QString &tempCode);
     int comparePriority(QString c);
     //出栈
     void popCode(const QString &code);

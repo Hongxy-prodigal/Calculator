@@ -240,57 +240,43 @@ void ScientificCalculator::btnOperatorClicked()
 //    }
 }
 
-void ScientificCalculator::pushCode(const QString &code)
+void ScientificCalculator::pushCode(const QString &tempCode)
 {
-    char sign;
-    if (code[0] == "×") {
-        sign = '*';
-    } else if (code[0] == "÷") {
-        sign = '/';
-    } else {
-        sign = code[0].toLatin1();
-    }
-    switch (sign) {
-    case '+':
-    case '-':
-    case '*':
-    case '/':
-    case 'm': {
+    QString result;
+    if (tempCode == "×" || tempCode == "÷" || tempCode == "+" || tempCode == "-"
+            || tempCode == "mod") {
         if (codes.empty() || codes.top() == '(') {
-            codes.push(code);
+            codes.push(tempCode);
         } else {
-            if (!codes.empty() && comparePriority(codes.top()) >= comparePriority(code)) {
-                //需要计算
-                operands.push(calculation());
-            } else
-                codes.push(code);
+            if (!codes.empty() && comparePriority(codes.top()) >= comparePriority(tempCode)) {
+                while (!codes.empty() && comparePriority(codes.top()) >= comparePriority(tempCode)) {
+                    //需要计算
+                    result = calculation();
+                    operands.push(result);
+                }
+                ui->display->setText(result);
+            }
+            codes.push(tempCode);
         }
-        break;
-    }
-    case '(': {
-        codes.push(code);
-        break;
-    }
-    case ')': {
+    } else if (tempCode == "(") {
+        codes.push(tempCode);
+    } else if (tempCode == ")") {
         while (codes.top() != "(") {
             //计算 出栈
-            operands.push(calculation());
+            result = calculation();
+            operands.push(result);
         }
+        ui->display->setText(result);
         //出栈"("
         codes.pop();
-        break;
     }
-    default:
-        break;
-    }
-
 }
 
 int ScientificCalculator::comparePriority(QString c)
 {
     if (c == "+" || c == "-")
         return 1;
-    else if (c == "*" || c == "/" || c == "mod")
+    else if (c == "×" || c == "÷" || c == "mod")
         return 2;
     else
         return 0;
@@ -425,13 +411,18 @@ QString ScientificCalculator::calculation()
         result = operand1 - operand2;
     } else if (tempCode == "×") {
         result = operand1 * operand2;
-    } else {
+    } else if (tempCode == "mod") {
+        double quotient = std::floor(operand1 / operand2);
+        result = operand1 - (operand2 * quotient);
+    } else if (tempCode == "÷") {
         if (operand2 == 0) {
             operand = "";
             code = "";
+            operands.clear();
+            codes.clear();
             return "除数不能为零";
-        }
-        result = operand1 / operand2;
+        } else
+            result = operand1 / operand2;
     }
     return QString::number(result);
 }
