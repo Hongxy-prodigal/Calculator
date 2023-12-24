@@ -42,6 +42,7 @@ private:
     int Bracket = 0;    //括号
     int have = 0;        //当前的操作数是否已经被但操作数运算了
     int calculated = 0;   //已经将栈里面的内容计算
+    int equal = 0;
 
 private slots:
     void on_btnNd_clicked();
@@ -51,7 +52,7 @@ private slots:
     void on_btnClearAll_clicked();
     void on_btnSign_clicked();
     void btnOperatorClicked();
-//    void on_btnEqual_clicked();
+    void on_btnEqual_clicked();
     void btnUniOperatorClicked();
     void keyPressEvent(QKeyEvent *event);
     void on_display_textChanged(const QString &arg1);   //变换C CE

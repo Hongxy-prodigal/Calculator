@@ -90,6 +90,13 @@ void ScientificCalculator::on_btnNd_clicked()
 //数字键
 void ScientificCalculator::btnNumClicked()
 {
+    if (equal == 1) {
+        ui->addDisplay->setText("");
+        ui->display->setText("");
+        equal = 0;
+    }
+    if (calculated == 1)
+        calculated = 0;
     //刚添加操作符
     if (code != "") {
         code = "";
@@ -191,6 +198,7 @@ void ScientificCalculator::on_btnClearAll_clicked()
         code = "";
         operands.clear();
         codes.clear();
+        ui->display->setText("");
         ui->addDisplay->setText("");
     }
     //清楚当前操作数
@@ -204,6 +212,10 @@ void ScientificCalculator::on_btnClearAll_clicked()
 //操作符
 void ScientificCalculator::btnOperatorClicked()
 {
+    if (equal == 1) {
+        equal = 0;
+        ui->addDisplay->setText("");
+    }
     QString tempCode = qobject_cast<QPushButton *>(sender())->text();
     if (code != "") {        //避免多次使用操作符
 //        叠加问题在这处理
@@ -264,28 +276,37 @@ int ScientificCalculator::comparePriority(QString c)
         return 0;
 }
 
-//void ScientificCalculator::on_btnEqual_clicked()
-//{
-
-//    if (codes != "") {      //有操作符时
-//        //计算
-//        if (operand == "") {                    //操作数为空让它自己乘自己
-//            operands = calculation();
-//            codes = "";
-//            ui->display->setText(operands);
-//        } else {                                //就算前面的数和操作数相乘
-//            operands = calculation();
-//            operand = "";
-//            codes = "";
-//            ui->display->setText(operands);
-//        }
-//    }
-//}
+void ScientificCalculator::on_btnEqual_clicked()
+{
+    if (equal == 1)
+        return;
+    QString result = "";
+    //如果为空,就将display给operand
+    if (operand == "")
+        operand = ui->display->text();
+    operands.push(operand);
+    while (!codes.isEmpty()) {     //有操作符时
+        result = calculation();
+        operands.push(result);
+    }
+    //划等号
+    ui->addDisplay->setText(ui->addDisplay->text() + operand + "=");
+    ui->display->setText(result);
+    operands.clear();
+    codes.clear();
+    code = "";
+    operand = result;
+    equal = 1;
+}
 
 //单操作符
 //单操作数叠加问题
 void ScientificCalculator::btnUniOperatorClicked()
 {
+    if (equal == 1) {
+        equal = 0;
+        ui->addDisplay->setText("");
+    }
     QString op = qobject_cast<QPushButton *>(sender())->text();
     QString str = ui->addDisplay->text();
     QString temp;
