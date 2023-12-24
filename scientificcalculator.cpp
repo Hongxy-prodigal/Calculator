@@ -90,6 +90,7 @@ void ScientificCalculator::on_btnNd_clicked()
 //数字键
 void ScientificCalculator::btnNumClicked()
 {
+    //刚添加操作符
     if (code != "") {
         code = "";
         ui->display->setText("");
@@ -204,10 +205,6 @@ void ScientificCalculator::on_btnClearAll_clicked()
 void ScientificCalculator::btnOperatorClicked()
 {
     QString tempCode = qobject_cast<QPushButton *>(sender())->text();
-    //如果没有左括号 就不加右括号
-//    if (code == ")" && Bracket == 0) {
-//        return;
-//    }
     if (code != "") {        //避免多次使用操作符
 //        叠加问题在这处理
         codes.pop();
@@ -215,29 +212,13 @@ void ScientificCalculator::btnOperatorClicked()
         code = tempCode;
         QString str = ui->addDisplay->text();
         ui->addDisplay->setText(str.left(str.size() - 1) + tempCode);
-        return;
+    } else {
+        operands.push(operand);
+        pushCode(tempCode);
+        ui->addDisplay->setText(ui->addDisplay->text() + operand + tempCode);
+        code = tempCode;
     }
-    operands.push(operand);
-    pushCode(tempCode);
-    ui->addDisplay->setText(ui->addDisplay->text() + operand + tempCode);
-    code = tempCode;
-//    if (codes.top() != "") {
-//        //计算
-//        operands = calculation();
-//        operand = "";
-//        codes = code;
-//        ui->display->setText(operands + codes);
-//    } else {
-//        //不计算
-//        if (operand != "") {
-//            operands = operand;
-//            operand = "";
-//        } else {
-//            operands = "0";
-//        }
-//        codes = code;
-//        ui->display->setText(operands + codes);
-//    }
+
 }
 
 void ScientificCalculator::pushCode(const QString &tempCode)
@@ -255,6 +236,7 @@ void ScientificCalculator::pushCode(const QString &tempCode)
                     operands.push(result);
                 }
                 ui->display->setText(result);
+                calculated = 1;
             }
             codes.push(tempCode);
         }
@@ -426,3 +408,37 @@ QString ScientificCalculator::calculation()
     }
     return QString::number(result);
 }
+
+//左括号
+void ScientificCalculator::on_btnLeftBracket_clicked()
+{
+    if (code == "") {        //数字跟括号 直接相乘
+        ui->btnMul->click();
+    }
+    ui->addDisplay->setText(ui->addDisplay->text() + "(");
+    ui->display->setText("0");
+    pushCode("(");
+    Bracket++;
+}
+
+//右括号
+void ScientificCalculator::on_btnRightBracket_clicked()
+{
+    //如果没有左括号 就不加右括号
+    if (Bracket == 0) {
+        return;
+    } else {
+        if (code != "") {
+            operand = ui->display->text();
+            operands.push(operand);
+            pushCode(")");
+            ui->addDisplay->setText(ui->addDisplay->text() + operand + ")");
+        } else {
+            operands.push(operand);
+            pushCode(")");
+            ui->addDisplay->setText(ui->addDisplay->text() + operand + ")");
+        }
+        Bracket--;
+    }
+}
+
