@@ -40,7 +40,7 @@ private:
     Ui::ScientificCalculator *ui;
     int Change = 0;         //变换按键
     int Bracket = 0;    //括号
-    int have = 0;        //当前的操作数是否已经被但操作数运算了
+    int uniOperator = 0;        //当前的操作数是否已经被但操作数运算了
     int calculated = 0;   //已经将栈里面的内容计算
     int equal = 0;
 
@@ -58,6 +58,7 @@ private slots:
     void on_display_textChanged(const QString &arg1);   //变换C CE
     void on_btnLeftBracket_clicked();
     void on_btnRightBracket_clicked();
+    void on_btnLog_clicked();
 };
 
 #endif // SCIENTIFICCALCULATOR_H

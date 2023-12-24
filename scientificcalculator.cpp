@@ -47,7 +47,6 @@ ScientificCalculator::ScientificCalculator(QWidget *parent) :
     connect(ui->btnDivide, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
     connect(ui->btnMod, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
     connect(ui->btnXy, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
-    connect(ui->btnLog, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
 
     //单操作符
     connect(ui->btnInverse, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
@@ -90,11 +89,13 @@ void ScientificCalculator::on_btnNd_clicked()
 //数字键
 void ScientificCalculator::btnNumClicked()
 {
+    //等号
     if (equal == 1) {
         ui->addDisplay->setText("");
         ui->display->setText("");
         equal = 0;
     }
+    //出栈计算了
     if (calculated == 1)
         calculated = 0;
     //刚添加操作符
@@ -103,31 +104,34 @@ void ScientificCalculator::btnNumClicked()
         ui->display->setText("");
         operand = "";
     }
-    //单操作数操作了
-    if (have == 1) {
-        have = 0;
+    //单操作符操作了
+    if (uniOperator == 1) {
+        uniOperator = 0;
+        removeOperand();
+        operand = "";
+        ui->display->setText(operand);
+    }
+    if (ui->addDisplay->text().right(1) == ")") {
         removeOperand();
         operand = "";
         ui->display->setText(operand);
     }
     QString digit = qobject_cast<QPushButton *>(sender())->text();
-    if (digit == "e")
-        digit = QString::number(M_E);
-    if (digit == "π")
-        digit = QString::number(M_PI);
+    if (digit == "e") {
+        operand = QString::number(M_E);
+    } else if (digit == "π")
+        operand = QString::number(M_PI);
     //根据点击的数字和当前操作数，判断操作数
-    if (digit == "0" && operand == "0") {
-        digit = "";
+    else {
+        if (digit == "0" && operand == "0") {
+            digit = "";
+        }
+        if (digit != "0" && operand == "0") {
+            operand = "";
+        }
+        operand += digit;
     }
-    if (digit != "0" && operand == "0") {
-        operand = "";
-    }
-    operand += digit;
-
     QString str = ui->display->text();
-    if (ui->addDisplay->text().right(1) == ")") {
-
-    }
     ui->display->setText(str + digit);
     qDebug() << (digit + " btn click");
 
@@ -217,17 +221,28 @@ void ScientificCalculator::btnOperatorClicked()
         ui->addDisplay->setText("");
     }
     QString tempCode = qobject_cast<QPushButton *>(sender())->text();
+    if (tempCode == "xʸ")
+        tempCode = "^";
+    else if (tempCode == "ʸ√")
+        tempCode = "yroot";
     if (code != "") {        //避免多次使用操作符
-//        叠加问题在这处理
-        codes.pop();
+        QString previousCode = codes.pop();
         pushCode(tempCode);
         code = tempCode;
         QString str = ui->addDisplay->text();
-        ui->addDisplay->setText(str.left(str.size() - 1) + tempCode);
+        //        叠加问题在这处理
+        if (calculated == 1 && comparePriority(code) > comparePriority(previousCode)) {
+            ui->addDisplay->setText("(" + str.left(str.size() - 1) + ")" + tempCode);
+            calculated = 0;
+        } else
+            ui->addDisplay->setText(str.left(str.size() - 1) + tempCode);
     } else {
         operands.push(operand);
         pushCode(tempCode);
-        ui->addDisplay->setText(ui->addDisplay->text() + operand + tempCode);
+        if (uniOperator == 1)
+            ui->addDisplay->setText(ui->addDisplay->text() + tempCode);
+        else
+            ui->addDisplay->setText(ui->addDisplay->text() + operand + tempCode);
         code = tempCode;
     }
 
@@ -237,7 +252,7 @@ void ScientificCalculator::pushCode(const QString &tempCode)
 {
     QString result;
     if (tempCode == "×" || tempCode == "÷" || tempCode == "+" || tempCode == "-"
-            || tempCode == "mod") {
+            || tempCode == "mod" || tempCode == "^" || tempCode == "yroot") {
         if (codes.empty() || codes.top() == '(') {
             codes.push(tempCode);
         } else {
@@ -268,9 +283,9 @@ void ScientificCalculator::pushCode(const QString &tempCode)
 
 int ScientificCalculator::comparePriority(QString c)
 {
-    if (c == "+" || c == "-")
+    if (c == "+" || c == "-" || c == "yroot")
         return 1;
-    else if (c == "×" || c == "÷" || c == "mod")
+    else if (c == "×" || c == "÷" || c == "mod" || c == "^")
         return 2;
     else
         return 0;
@@ -312,6 +327,10 @@ void ScientificCalculator::btnUniOperatorClicked()
     QString temp;
     double result = ui->display->text().toDouble();
     QString resultString = ui->display->text();
+    if (resultString == "") {
+        resultString = "0";
+        result = 0;
+    }
     if (op == "x²") {
         temp = "sqr(" + resultString + ")";
         result = result * result;
@@ -370,13 +389,13 @@ void ScientificCalculator::btnUniOperatorClicked()
     }
     operand = QString::number(result);
     ui->display->setText(operand);
-    have = 1;
+    uniOperator = 1;
 }
 
 //对应去除
 void ScientificCalculator::removeOperand()
 {
-    QStringList operators = {"+", "-", "*", "/", "mod"}; // 所有可能的运算符
+    QStringList operators = {"+", "-", "×", "÷", "mod"}; // 所有可能的运算符
     int index = -1;
     QString str = ui->addDisplay->text();
     for (const QString &op : operators) {
@@ -417,7 +436,11 @@ QString ScientificCalculator::calculation()
     } else if (tempCode == "mod") {
         double quotient = std::floor(operand1 / operand2);
         result = operand1 - (operand2 * quotient);
-    } else if (tempCode == "÷") {
+    } else if (tempCode == "^") {
+        result = qPow(operand2, operand1);
+    }  else if (tempCode == "yroot") {
+        result = qPow(operand2, 1.0 / operand1);
+    }  else if (tempCode == "÷") {
         if (operand2 == 0) {
             operand = "";
             code = "";
@@ -460,6 +483,14 @@ void ScientificCalculator::on_btnRightBracket_clicked()
             ui->addDisplay->setText(ui->addDisplay->text() + operand + ")");
         }
         Bracket--;
+    }
+}
+
+
+void ScientificCalculator::on_btnLog_clicked()
+{
+    if (Change == 1) {
+
     }
 }
 
