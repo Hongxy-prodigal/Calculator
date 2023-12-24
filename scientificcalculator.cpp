@@ -45,9 +45,10 @@ ScientificCalculator::ScientificCalculator(QWidget *parent) :
     connect(ui->btnSub, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
     connect(ui->btnMul, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
     connect(ui->btnDivide, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
+    connect(ui->btnMod, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
     connect(ui->btnXy, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
     connect(ui->btnLog, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
-    connect(ui->btnMod, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
+
     //单操作符
     connect(ui->btnInverse, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
     connect(ui->btnSqrt, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
@@ -86,10 +87,15 @@ void ScientificCalculator::on_btnNd_clicked()
 
 }
 
-
 //数字键
 void ScientificCalculator::btnNumClicked()
 {
+    if (code != "") {
+        code = "";
+        ui->display->setText("");
+        operand = "";
+    }
+    //单操作数操作了
     if (have == 1) {
         have = 0;
         removeOperand();
@@ -197,21 +203,25 @@ void ScientificCalculator::on_btnClearAll_clicked()
 //操作符
 void ScientificCalculator::btnOperatorClicked()
 {
-    code = qobject_cast<QPushButton *>(sender())->text();
+    QString tempCode = qobject_cast<QPushButton *>(sender())->text();
     //如果没有左括号 就不加右括号
-    if (code == ")" && Bracket == 0) {
-        return;
-    }
-    if (operand == "") {        //避免多次使用操作数
-        //自定义一个push 需要处理括号 需要处理入栈优先级变高的
+//    if (code == ")" && Bracket == 0) {
+//        return;
+//    }
+    if (code != "") {        //避免多次使用操作符
+//        叠加问题在这处理
         codes.pop();
-        pushCode(code);
-
-//        ui->display->setText(operands + codes);
+        pushCode(tempCode);
+        code = tempCode;
+        QString str = ui->addDisplay->text();
+        ui->addDisplay->setText(str.left(str.size() - 1) + tempCode);
         return;
     }
-    pushCode(code);
-//    if (codes != "") {
+    operands.push(operand);
+    pushCode(tempCode);
+    ui->addDisplay->setText(ui->addDisplay->text() + operand + tempCode);
+    code = tempCode;
+//    if (codes.top() != "") {
 //        //计算
 //        operands = calculation();
 //        operand = "";
@@ -228,6 +238,62 @@ void ScientificCalculator::btnOperatorClicked()
 //        codes = code;
 //        ui->display->setText(operands + codes);
 //    }
+}
+
+void ScientificCalculator::pushCode(const QString &code)
+{
+    char sign;
+    if (code[0] == "×") {
+        sign = '*';
+    } else if (code[0] == "÷") {
+        sign = '/';
+    } else {
+        sign = code[0].toLatin1();
+    }
+    switch (sign) {
+    case '+':
+    case '-':
+    case '*':
+    case '/':
+    case 'm': {
+        if (codes.empty() || codes.top() == '(') {
+            codes.push(code);
+        } else {
+            if (!codes.empty() && comparePriority(codes.top()) >= comparePriority(code)) {
+                //需要计算
+                operands.push(calculation());
+            } else
+                codes.push(code);
+        }
+        break;
+    }
+    case '(': {
+        codes.push(code);
+        break;
+    }
+    case ')': {
+        while (codes.top() != "(") {
+            //计算 出栈
+            operands.push(calculation());
+        }
+        //出栈"("
+        codes.pop();
+        break;
+    }
+    default:
+        break;
+    }
+
+}
+
+int ScientificCalculator::comparePriority(QString c)
+{
+    if (c == "+" || c == "-")
+        return 1;
+    else if (c == "*" || c == "/" || c == "mod")
+        return 2;
+    else
+        return 0;
 }
 
 //void ScientificCalculator::on_btnEqual_clicked()
@@ -249,6 +315,7 @@ void ScientificCalculator::btnOperatorClicked()
 //}
 
 //单操作符
+//单操作数叠加问题
 void ScientificCalculator::btnUniOperatorClicked()
 {
     QString op = qobject_cast<QPushButton *>(sender())->text();
@@ -318,7 +385,18 @@ void ScientificCalculator::btnUniOperatorClicked()
 }
 
 //对应去除
-
+void ScientificCalculator::removeOperand()
+{
+    QStringList operators = {"+", "-", "*", "/", "mod"}; // 所有可能的运算符
+    int index = -1;
+    QString str = ui->addDisplay->text();
+    for (const QString &op : operators) {
+        int temp = str.lastIndexOf(op);
+        index = index >  temp ? index : temp;
+    }
+    str = str.left(index + 1);
+    ui->addDisplay->setText(str);
+}
 
 //键盘事件
 void ScientificCalculator::keyPressEvent(QKeyEvent *event)
@@ -335,95 +413,25 @@ void ScientificCalculator::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void ScientificCalculator::pushCode(const QString &code)
-{
-    char sign = code[0].toLatin1();
-    switch (sign) {
-    case '+':
-    case '-':
-    case '*':
-    case '/': {
-        if (codes.empty() || codes.top() == '(') {
-            codes.push(code);
-        } else {
-            if (!codes.empty() && comparePriority(codes.top()) >= comparePriority(code)) {
-                //需要计算
-                calculation();
-            } else
-                codes.push(code);
-        }
-        break;
-    }
-    case '(': {
-        codes.push(code);
-        break;
-    }
-    case ')': {
-        while (codes.top() != "(") {
-            //计算 出栈
-            calculation();
-        }
-        //出栈"("
-        codes.pop();
-        break;
-    }
-    default:
-        break;
-    }
-}
-
-int ScientificCalculator::comparePriority(QString c)
-{
-    if (c == "+" || c == "-")
-        return 1;
-    else if (c == "*" || c == "/" || c == "mod")
-        return 2;
-    else
-        return 0;
-}
-
-void ScientificCalculator::removeOperand()
-{
-    QStringList operators = {"+", "-", "*", "/", "mod"}; // 所有可能的运算符
-    int index = -1;
-    QString str = ui->addDisplay->text();
-    for (const QString &op : operators) {
-        int temp = str.lastIndexOf(op);
-        index = index >  temp ? index : temp;
-    }
-    str = str.left(index + 1);
-    ui->addDisplay->setText(str);
-}
-
 QString ScientificCalculator::calculation()
 {
     double result;
     QString tempCode = codes.pop();
-    QString tempOperand = operands.pop();
+    double operand1 = operands.pop().toDouble();
+    double operand2 = operands.pop().toDouble();
     if (tempCode == "+") {
-        if (operand == "")
-            result = tempOperand.toDouble() * 2;
-        else
-            result = tempOperand.toDouble() + operand.toDouble();
+        result = operand1 + operand2;
     } else if (tempCode == "-") {
-        if (operand == "")
-            result = 0;
-        else
-            result = tempOperand.toDouble() - operand.toDouble();
+        result = operand1 - operand2;
     } else if (tempCode == "×") {
-        if (operand == "")
-            result = tempOperand.toDouble() * tempOperand.toDouble();
-        else
-            result = tempOperand.toDouble() * operand.toDouble();
+        result = operand1 * operand2;
     } else {
-        if (operand == "")
-            result = 1;
-        else if (operand == "0") {
+        if (operand2 == 0) {
             operand = "";
             code = "";
             return "除数不能为零";
         }
-        result = tempOperand.toDouble() / operand.toDouble();
+        result = operand1 / operand2;
     }
     return QString::number(result);
 }
