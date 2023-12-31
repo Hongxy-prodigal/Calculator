@@ -77,6 +77,32 @@ int getLastOperator(const QString &str, QStringList operators)
     return index;
 }
 
+int removeRightBracket(const QString &str)
+{
+    int rightBracketCount = 0;
+    int index = str.length() - 1;
+    int count = 0;
+
+    // 从右往左找，找到第一个左括号之前
+    while (index >= 0 && str[index] != '(') {
+        if (str[index] == ')') {
+            ++rightBracketCount;
+        }
+        --index;
+    }
+    while (index >= 0) {
+        if (str[index] == "(") {
+            ++count;
+            if (count == rightBracketCount) {
+                return index; // 返回第 nth 个字符的索引位置
+            }
+        }
+        --index;
+    }
+    return index;
+}
+
+
 void ScientificCalculator::on_btnNd_clicked()
 {
     if (Change == 0) {
@@ -129,18 +155,18 @@ void ScientificCalculator::btnNumClicked()
         removeOperand();
         operand = "";
         ui->display->setText(operand);
+
     }
     //右括号加数字
     if (ui->addDisplay->text().right(1) == ")") {
-        QStringList operators = {")"}; // 所有可能的运算符
-
         operand = "";
         ui->display->setText(operand);
 
         QString str = ui->addDisplay->text();
-        int index = getLastOperator(str, operators);
-        str = str.left(index + 1);
+        int index = removeRightBracket(str);
+        str = str.left(index);
         ui->addDisplay->setText(str);
+        qDebug() << operands.pop();
     }
     QString digit = qobject_cast<QPushButton *>(sender())->text();
     if (digit == "e") {
@@ -349,10 +375,11 @@ void ScientificCalculator::on_btnEqual_clicked()
         return;
     QString result = "";
     //如果操作符不为空且操作数为空,认定display的数字为操作数
-    if (code != "" && operand == "") {
+    if (code != "" && operand == "")
         operand = ui->display->text();
+    if (operand != "")
         operands.push(operand);
-    }
+
 //    qDebug() << codes;
     while (!codes.isEmpty()) {     //有操作符时
         result = calculation();
