@@ -47,6 +47,7 @@ ScientificCalculator::ScientificCalculator(QWidget *parent) :
     connect(ui->btnDivide, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
     connect(ui->btnMod, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
     connect(ui->btnXy, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
+    connect(ui->btnLog, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
 
     //单操作符
     connect(ui->btnInverse, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
@@ -56,12 +57,24 @@ ScientificCalculator::ScientificCalculator(QWidget *parent) :
     connect(ui->btnLn, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
     connect(ui->btnAbs, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
     connect(ui->btnFactorial, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
+    connect(ui->btnLog, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
 
 }
 
 ScientificCalculator::~ScientificCalculator()
 {
     delete ui;
+}
+
+//获取最后一次出现的操作符
+int getLastOperator(const QString &str, QStringList operators)
+{
+    int index = -1;
+    for (const QString &op : operators) {
+        int temp = str.lastIndexOf(op);
+        index = index >  temp ? index : temp;
+    }
+    return index;
 }
 
 void ScientificCalculator::on_btnNd_clicked()
@@ -73,6 +86,9 @@ void ScientificCalculator::on_btnNd_clicked()
         ui->btnTen->setText("2ˣ");
         ui->btnLog->setText("logᵥx");
         ui->btnLn->setText("eˣ");
+        ui->btnNd->setStyleSheet("QPushButton:hover { " "background-color: rgb(25, 106, 167);"
+                                 "font: 16pt Arial;" "} " "QPushButton { " "background-color: rgb(0, 90, 158); "
+                                 "color: rgb(255, 255, 255); " "font: 12pt Arial;" "}");
         Change = 1;
     } else {
         ui->btnSquare->setText("x²");
@@ -81,6 +97,9 @@ void ScientificCalculator::on_btnNd_clicked()
         ui->btnTen->setText("10ˣ");
         ui->btnLog->setText("log");
         ui->btnLn->setText("ln");
+        ui->btnNd->setStyleSheet("QPushButton:hover {" "background-color: rgb(246, 246, 246);"
+                                 "font: 16pt Arial;" "}" "QPushButton {" "background-color: rgb(249, 249, 249);" "font: 12pt Arial;"
+                                 "}");
         Change = 0;
     }
 
@@ -111,18 +130,36 @@ void ScientificCalculator::btnNumClicked()
         operand = "";
         ui->display->setText(operand);
     }
+    //右括号加数字
     if (ui->addDisplay->text().right(1) == ")") {
-        removeOperand();
+        QStringList operators = {")"}; // 所有可能的运算符
+
         operand = "";
         ui->display->setText(operand);
+
+        QString str = ui->addDisplay->text();
+        int index = getLastOperator(str, operators);
+        str = str.left(index + 1);
+        ui->addDisplay->setText(str);
     }
     QString digit = qobject_cast<QPushButton *>(sender())->text();
     if (digit == "e") {
+        ePi = 1;
         operand = QString::number(M_E);
-    } else if (digit == "π")
+        digit = QString::number(M_E);
+        ui->display->setText(digit);
+    } else if (digit == "π") {
+        ePi = 1;
         operand = QString::number(M_PI);
+        digit = QString::number(M_PI);
+        ui->display->setText(digit);
+    }
     //根据点击的数字和当前操作数，判断操作数
     else {
+        if (ePi == 1) {
+            ui->display->setText("");
+            operand = "";
+        }
         if (digit == "0" && operand == "0") {
             digit = "";
         }
@@ -130,9 +167,9 @@ void ScientificCalculator::btnNumClicked()
             operand = "";
         }
         operand += digit;
+        QString str = ui->display->text();
+        ui->display->setText(str + digit);
     }
-    QString str = ui->display->text();
-    ui->display->setText(str + digit);
     qDebug() << (digit + " btn click");
 
 }
@@ -146,11 +183,12 @@ void ScientificCalculator::on_btnPeriod_clicked()
         //判断操作数是否存在
         if (operand == "") {
             operand = "0.";
-            ui->display->setText(str + "0.");
+            ui->display->setText("0.");
         } else {
             operand += '.';
             ui->display->setText(str + '.');
         }
+        code = "";
     }
 }
 
@@ -216,15 +254,20 @@ void ScientificCalculator::on_btnClearAll_clicked()
 //操作符
 void ScientificCalculator::btnOperatorClicked()
 {
+    QString tempCode = qobject_cast<QPushButton *>(sender())->text();
+    //这是单操作符
+    if (tempCode == "log")
+        return;
     if (equal == 1) {
         equal = 0;
         ui->addDisplay->setText("");
     }
-    QString tempCode = qobject_cast<QPushButton *>(sender())->text();
     if (tempCode == "xʸ")
         tempCode = "^";
     else if (tempCode == "ʸ√")
         tempCode = "yroot";
+    else if (tempCode == "logᵥx")
+        tempCode = "log base";
     if (code != "") {        //避免多次使用操作符
         QString previousCode = codes.pop();
         pushCode(tempCode);
@@ -237,7 +280,9 @@ void ScientificCalculator::btnOperatorClicked()
         } else
             ui->addDisplay->setText(str.left(str.size() - 1) + tempCode);
     } else {
-        operands.push(operand);
+        //当操作数为空时，不需要将操作数放入栈里
+        if (operand != "")
+            operands.push(operand);
         pushCode(tempCode);
         if (uniOperator == 1)
             ui->addDisplay->setText(ui->addDisplay->text() + tempCode);
@@ -245,14 +290,17 @@ void ScientificCalculator::btnOperatorClicked()
             ui->addDisplay->setText(ui->addDisplay->text() + operand + tempCode);
         code = tempCode;
     }
-
+    operand = "";
 }
 
+//操作符入栈
 void ScientificCalculator::pushCode(const QString &tempCode)
 {
+    qDebug() << codes;
+    qDebug() << operands;
     QString result;
     if (tempCode == "×" || tempCode == "÷" || tempCode == "+" || tempCode == "-"
-            || tempCode == "mod" || tempCode == "^" || tempCode == "yroot") {
+            || tempCode == "mod" || tempCode == "^" || tempCode == "yroot" || tempCode == "log base") {
         if (codes.empty() || codes.top() == '(') {
             codes.push(tempCode);
         } else {
@@ -279,11 +327,14 @@ void ScientificCalculator::pushCode(const QString &tempCode)
         //出栈"("
         codes.pop();
     }
+    qDebug() << codes;
+    qDebug() << operands;
 }
 
+//判断优先级
 int ScientificCalculator::comparePriority(QString c)
 {
-    if (c == "+" || c == "-" || c == "yroot")
+    if (c == "+" || c == "-" || c == "yroot" || c == "log base")
         return 1;
     else if (c == "×" || c == "÷" || c == "mod" || c == "^")
         return 2;
@@ -291,21 +342,28 @@ int ScientificCalculator::comparePriority(QString c)
         return 0;
 }
 
+//等于号
 void ScientificCalculator::on_btnEqual_clicked()
 {
     if (equal == 1)
         return;
     QString result = "";
-    //如果为空,就将display给operand
-    if (operand == "")
+    //如果操作符不为空且操作数为空,认定display的数字为操作数
+    if (code != "" && operand == "") {
         operand = ui->display->text();
-    operands.push(operand);
+        operands.push(operand);
+    }
+//    qDebug() << codes;
     while (!codes.isEmpty()) {     //有操作符时
         result = calculation();
         operands.push(result);
     }
     //划等号
-    ui->addDisplay->setText(ui->addDisplay->text() + operand + "=");
+    //如果是单操作符运算了，不需要加操作数
+    if (uniOperator == 1)
+        ui->addDisplay->setText(ui->addDisplay->text() + "=");
+    else
+        ui->addDisplay->setText(ui->addDisplay->text() + operand + "=");
     ui->display->setText(result);
     operands.clear();
     codes.clear();
@@ -318,15 +376,26 @@ void ScientificCalculator::on_btnEqual_clicked()
 //单操作数叠加问题
 void ScientificCalculator::btnUniOperatorClicked()
 {
+    QString op = qobject_cast<QPushButton *>(sender())->text();
+    //这是双操作符
+    if (op == "logᵥx")
+        return;
     if (equal == 1) {
         equal = 0;
         ui->addDisplay->setText("");
     }
-    QString op = qobject_cast<QPushButton *>(sender())->text();
     QString str = ui->addDisplay->text();
     QString temp;
     double result = ui->display->text().toDouble();
-    QString resultString = ui->display->text();
+    QString resultString;
+    //单操作符叠加处理
+    if (uniOperator == 1) {
+        QStringList operators = {"+", "-", "×", "÷", "mod"}; // 所有可能的运算符
+        int index = getLastOperator(str, operators);
+        resultString = str.right(str.size() - index - 1);
+        str = str.left(index + 1);
+    } else
+        resultString = ui->display->text();
     if (resultString == "") {
         resultString = "0";
         result = 0;
@@ -365,6 +434,21 @@ void ScientificCalculator::btnUniOperatorClicked()
     } else if (op == "|x|") {
         temp = "abs(" + resultString + ")";
         result = qFabs(result);
+    } else if (op == "log") {
+        temp = "log(" + resultString + ")";
+        result = qLn(result) / qLn(10);
+    } else if (op == "x³") {
+        temp = "cube(" + resultString + ")";
+        result = result * result * result;
+    } else if (op == "∛") {
+        temp = "cuberoot(" + resultString + ")";
+        result = qPow(result, 1 / 3);
+    } else if (op == "2ˣ") {
+        temp = "2^(" + resultString + ")";
+        result = qPow(2, result);
+    } else if (op == "eˣ") {
+        temp = "e^(" + resultString + ")";
+        result = qPow(M_E, result);
     } else if (op == "n!") {
         temp = "fact(" + resultString + ")";
         if (result < 0) {
@@ -396,15 +480,13 @@ void ScientificCalculator::btnUniOperatorClicked()
 void ScientificCalculator::removeOperand()
 {
     QStringList operators = {"+", "-", "×", "÷", "mod"}; // 所有可能的运算符
-    int index = -1;
     QString str = ui->addDisplay->text();
-    for (const QString &op : operators) {
-        int temp = str.lastIndexOf(op);
-        index = index >  temp ? index : temp;
-    }
+    int index = getLastOperator(str, operators);
     str = str.left(index + 1);
     ui->addDisplay->setText(str);
 }
+
+
 
 //键盘事件
 void ScientificCalculator::keyPressEvent(QKeyEvent *event)
@@ -430,17 +512,19 @@ QString ScientificCalculator::calculation()
     if (tempCode == "+") {
         result = operand1 + operand2;
     } else if (tempCode == "-") {
-        result = operand1 - operand2;
+        result = operand2 - operand1;
     } else if (tempCode == "×") {
         result = operand1 * operand2;
     } else if (tempCode == "mod") {
-        double quotient = std::floor(operand1 / operand2);
-        result = operand1 - (operand2 * quotient);
+        double quotient = std::floor(operand2 / operand1);
+        result = operand2 - (operand1 * quotient);
     } else if (tempCode == "^") {
         result = qPow(operand2, operand1);
     }  else if (tempCode == "yroot") {
         result = qPow(operand2, 1.0 / operand1);
-    }  else if (tempCode == "÷") {
+    } else if (tempCode == "log base") {
+        result = qLn(operand2) / qLn(operand1);
+    } else if (tempCode == "÷") {
         if (operand2 == 0) {
             operand = "";
             code = "";
@@ -450,6 +534,7 @@ QString ScientificCalculator::calculation()
         } else
             result = operand1 / operand2;
     }
+//    qDebug() << operand1 << tempCode << operand2;
     return QString::number(result);
 }
 
@@ -460,8 +545,9 @@ void ScientificCalculator::on_btnLeftBracket_clicked()
         ui->btnMul->click();
     }
     ui->addDisplay->setText(ui->addDisplay->text() + "(");
-    ui->display->setText("0");
     pushCode("(");
+    ui->display->setText("0");
+    operand = "0";
     Bracket++;
 }
 
@@ -472,25 +558,21 @@ void ScientificCalculator::on_btnRightBracket_clicked()
     if (Bracket == 0) {
         return;
     } else {
+        //操作符后面接括号，将显示的当作操作数
         if (code != "") {
+            qDebug() << "code is not null";
             operand = ui->display->text();
             operands.push(operand);
             pushCode(")");
             ui->addDisplay->setText(ui->addDisplay->text() + operand + ")");
         } else {
+            qDebug() << "code is null";
             operands.push(operand);
             pushCode(")");
             ui->addDisplay->setText(ui->addDisplay->text() + operand + ")");
         }
         Bracket--;
-    }
-}
-
-
-void ScientificCalculator::on_btnLog_clicked()
-{
-    if (Change == 1) {
-
+        operand = "";
     }
 }
 
