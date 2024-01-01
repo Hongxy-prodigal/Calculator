@@ -10,5 +10,7 @@
         <file>image/painting.png</file>
         <file>image/volume.png</file>
         <file>image/weight.png</file>
+        <file>image/function.png</file>
+        <file>image/triangle.png</file>
     </qresource>
 </RCC>

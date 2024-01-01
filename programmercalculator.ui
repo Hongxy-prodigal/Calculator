@@ -432,6 +432,9 @@ QPushButton:!hover{
        </item>
        <item row="0" column="0" colspan="5">
         <widget class="QLineEdit" name="display">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -454,7 +457,12 @@ QPushButton:!hover{
           </font>
          </property>
          <property name="styleSheet">
-          <string notr="true">font-size:40pt 
+          <string notr="true">
+QLineEdit{
+	background-color:rgb(243, 243, 243);
+	font-size:40pt 
+
+}
 </string>
          </property>
          <property name="frame">
@@ -643,7 +651,11 @@ QPushButton:!hover{
         </widget>
        </item>
        <item row="2" column="1" colspan="4">
-        <widget class="QLineEdit" name="lineEdit"/>
+        <widget class="QLineEdit" name="lineEdit">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
        </item>
        <item row="12" column="2">
         <widget class="QPushButton" name="btnNum2">
@@ -709,7 +721,11 @@ QPushButton:!hover{
         </widget>
        </item>
        <item row="5" column="1" colspan="4">
-        <widget class="QLineEdit" name="lineEdit_4"/>
+        <widget class="QLineEdit" name="lineEdit_4">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
        </item>
        <item row="9" column="3">
         <widget class="QPushButton" name="btnSqrt">
@@ -905,7 +921,11 @@ QPushButton:!hover{
         </widget>
        </item>
        <item row="4" column="1" colspan="4">
-        <widget class="QLineEdit" name="lineEdit_3"/>
+        <widget class="QLineEdit" name="lineEdit_3">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
        </item>
        <item row="10" column="0">
         <widget class="QPushButton" name="btnDel_4">
@@ -936,7 +956,11 @@ QPushButton:!hover{
         </widget>
        </item>
        <item row="3" column="1" colspan="4">
-        <widget class="QLineEdit" name="lineEdit_2"/>
+        <widget class="QLineEdit" name="lineEdit_2">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
        </item>
        <item row="7" column="3">
         <widget class="QPushButton" name="btnClearAll">

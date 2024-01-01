@@ -23,6 +23,7 @@ public:
     QStack<QString> codes;      //存储操作符
     QString operand;            //当前的操作数
     QString code;               //当前的操作符
+    QString exp = "";            //exp的指数
 //    QString operands;
 //    QString codes;
     QMap<int, QPushButton *> keyBtns;
@@ -59,6 +60,7 @@ private slots:
     void on_display_textChanged(const QString &arg1);   //变换C CE
     void on_btnLeftBracket_clicked();
     void on_btnRightBracket_clicked();
+    void on_btnExp_clicked();
 };
 
 #endif // SCIENTIFICCALCULATOR_H
