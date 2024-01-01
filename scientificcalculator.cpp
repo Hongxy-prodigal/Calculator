@@ -5,6 +5,7 @@
 #include <QtMath>
 #include <QtCore/qmath.h>
 #include <qdebug.h>
+#include <QPushButton>
 
 ScientificCalculator::ScientificCalculator(QWidget *parent) :
     QWidget(parent),
@@ -12,6 +13,8 @@ ScientificCalculator::ScientificCalculator(QWidget *parent) :
 {
     ui->setupUi(this);
 //    operand = "0";
+    ui->triangleGroupBox->setVisible(false);
+    ui->functionGroupBox->setVisible(false);
     keyBtns = {
         {Qt::Key_0, ui->btnNum0},
         {Qt::Key_1, ui->btnNum1},
@@ -67,8 +70,9 @@ ScientificCalculator::~ScientificCalculator()
 }
 
 //获取最后一次出现的操作符
-int getLastOperator(const QString &str, QStringList operators)
+int getLastOperator(const QString &str)
 {
+    QStringList operators = {"+", "-", "×", "÷", "mod", "^", "yroot", "log base"}; // 所有可能的运算符
     int index = -1;
     for (const QString &op : operators) {
         int temp = str.lastIndexOf(op);
@@ -101,11 +105,22 @@ int removeRightBracket(const QString &str)
     }
     return index;
 }
-
+//三角函数隐藏与显示
+void ScientificCalculator::on_btnTriangle_clicked()
+{
+    ui->triangleGroupBox->setVisible(!ui->triangleGroupBox->isVisible());
+    ui->functionGroupBox->setVisible(false);
+}
+//函数隐藏与显示
+void ScientificCalculator::on_btnFuction_clicked()
+{
+    ui->triangleGroupBox->setVisible(false);
+    ui->functionGroupBox->setVisible(!ui->functionGroupBox->isVisible());
+}
 
 void ScientificCalculator::on_btnNd_clicked()
 {
-    if (ndChange == 0) {
+    if (nd == 0) {
         ui->btnSquare->setText("x³");
         ui->btnSqrt->setText("∛");
         ui->btnXy->setText("ʸ√");
@@ -115,7 +130,7 @@ void ScientificCalculator::on_btnNd_clicked()
         ui->btnNd->setStyleSheet("QPushButton:hover { " "background-color: rgb(25, 106, 167);"
                                  "font: 16pt Arial;" "} " "QPushButton { " "background-color: rgb(0, 90, 158); "
                                  "color: rgb(255, 255, 255); " "font: 12pt Arial;" "}");
-        ndChange = 1;
+        nd = 1;
     } else {
         ui->btnSquare->setText("x²");
         ui->btnSqrt->setText("√");
@@ -126,7 +141,50 @@ void ScientificCalculator::on_btnNd_clicked()
         ui->btnNd->setStyleSheet("QPushButton:hover {" "background-color: rgb(246, 246, 246);"
                                  "font: 16pt Arial;" "}" "QPushButton {" "background-color: rgb(249, 249, 249);" "font: 12pt Arial;"
                                  "}");
-        ndChange = 0;
+        nd = 0;
+    }
+}
+//三角nd
+void ScientificCalculator::on_btnTriangleNd_clicked()
+{
+    if (ndTriangle == 0) {
+        for (QPushButton *button : ui->triangleGroupBox->findChildren<QPushButton *>())
+            if (button->text() != "2nd" && button->text() != "hyp")
+                button->setText(button->text() + "⁻¹");
+        ui->btnTriangleNd->setStyleSheet("QPushButton:hover { " "background-color: rgb(24, 105, 166);"
+                                         "} " "QPushButton { " "background-color: rgb(0, 90, 158); "
+                                         "color: rgb(255, 255, 255); " "font: 13pt Arial;" "}");
+        ndTriangle = 1;
+    } else {
+        for (QPushButton *button : ui->triangleGroupBox->findChildren<QPushButton *>())
+            if (button->text() != "2nd" && button->text() != "hyp")
+                button->setText(button->text().remove("⁻¹"));
+        ui->btnTriangleNd->setStyleSheet("QPushButton:hover {" "background-color: rgb(241, 241, 241);"
+                                         "}" "QPushButton {" "background-color: rgb(248, 248, 248);" "font: 13pt Arial;"
+                                         "}");
+        ndTriangle = 0;
+    }
+}
+
+//hyp
+void ScientificCalculator::on_btnHyp_clicked()
+{
+    if (hyp == 0) {
+        for (QPushButton *button : ui->triangleGroupBox->findChildren<QPushButton *>())
+            if (button->text() != "2nd" && button->text() != "hyp")
+                button->setText(button->text().insert(3, 'h'));
+        ui->btnHyp->setStyleSheet("QPushButton:hover { " "background-color: rgb(24, 105, 166);"
+                                  "} " "QPushButton { " "background-color: rgb(0, 90, 158); "
+                                  "color: rgb(255, 255, 255); " "font: 13pt Arial;" "}");
+        hyp = 1;
+    } else {
+        for (QPushButton *button : ui->triangleGroupBox->findChildren<QPushButton *>())
+            if (button->text() != "2nd" && button->text() != "hyp")
+                button->setText(button->text().remove("h"));
+        ui->btnHyp->setStyleSheet("QPushButton:hover {" "background-color: rgb(241, 241, 241);"
+                                  "}" "QPushButton {" "background-color: rgb(248, 248, 248);" "font: 13pt Arial;"
+                                  "}");
+        hyp = 0;
     }
 }
 
@@ -235,8 +293,7 @@ void ScientificCalculator::on_btnSign_clicked()
             //如果是对以及被单操作符操作过的操作数，则要用negate()
             if (uniOperator == 1) {
                 QString str = ui->addDisplay->text();
-                QStringList operators = {"+", "-", "×", "÷", "mod"}; // 所有可能的运算符
-                int index = getLastOperator(str, operators);
+                int index = getLastOperator(str);
                 QString resultString = str.right(str.size() - index - 1);
                 str = str.left(index + 1);
                 resultString = "negate(" + resultString + ")";
@@ -460,8 +517,7 @@ void ScientificCalculator::btnUniOperatorClicked()
     QString resultString;
     //单操作符叠加处理
     if (uniOperator == 1) {
-        QStringList operators = {"+", "-", "×", "÷", "mod"}; // 所有可能的运算符
-        int index = getLastOperator(str, operators);
+        int index = getLastOperator(str);
         resultString = str.right(str.size() - index - 1);
         str = str.left(index + 1);
     } else
@@ -549,9 +605,8 @@ void ScientificCalculator::btnUniOperatorClicked()
 //对应去除
 void ScientificCalculator::removeOperand()
 {
-    QStringList operators = {"+", "-", "×", "÷", "mod"}; // 所有可能的运算符
     QString str = ui->addDisplay->text();
-    int index = getLastOperator(str, operators);
+    int index = getLastOperator(str);
     str = str.left(index + 1);
     ui->addDisplay->setText(str);
 }

@@ -36,7 +36,9 @@ public:
 
 private:
     Ui::ScientificCalculator *ui;
-    int ndChange = 0;           //变换按键
+    int ndTriangle = 0;     //三角函数的nd转换
+    int hyp = 0;
+    int nd = 0;           //变换按键
     int Bracket = 0;            //括号
     int uniOperator = 0;        //当前的操作数是否已经被但操作数运算了
     int calculated = 0;         //已经将栈里面的内容计算
@@ -59,6 +61,9 @@ private slots:
     void on_btnRightBracket_clicked();
     void on_btnExp_clicked();
     void on_btnTriangle_clicked();
+    void on_btnFuction_clicked();
+    void on_btnTriangleNd_clicked();
+    void on_btnHyp_clicked();
 };
 
 #endif // SCIENTIFICCALCULATOR_H

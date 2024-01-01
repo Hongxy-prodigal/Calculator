@@ -1086,7 +1086,7 @@ QPushButton:!hover{
         </widget>
        </item>
        <item row="3" column="1" colspan="3">
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="triangleGroupBox">
          <property name="styleSheet">
           <string notr="true"/>
          </property>
@@ -1134,7 +1134,7 @@ QPushButton{
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QPushButton" name="btnNd_3">
+           <widget class="QPushButton" name="btnSin">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -1173,7 +1173,7 @@ QPushButton{
            </widget>
           </item>
           <item row="0" column="2">
-           <widget class="QPushButton" name="btnNd_4">
+           <widget class="QPushButton" name="btnCos">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -1212,7 +1212,7 @@ QPushButton{
            </widget>
           </item>
           <item row="0" column="3">
-           <widget class="QPushButton" name="btnNd_5">
+           <widget class="QPushButton" name="btnTan">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -1251,7 +1251,7 @@ QPushButton{
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QPushButton" name="btnNd_6">
+           <widget class="QPushButton" name="btnHyp">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -1290,7 +1290,7 @@ QPushButton{
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QPushButton" name="btnNd_7">
+           <widget class="QPushButton" name="btnSec">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -1329,7 +1329,7 @@ QPushButton{
            </widget>
           </item>
           <item row="1" column="2">
-           <widget class="QPushButton" name="btnNd_8">
+           <widget class="QPushButton" name="btnCes">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -1368,7 +1368,7 @@ QPushButton{
            </widget>
           </item>
           <item row="1" column="3">
-           <widget class="QPushButton" name="btnNd_9">
+           <widget class="QPushButton" name="btnCot">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -1410,7 +1410,7 @@ QPushButton{
         </widget>
        </item>
        <item row="3" column="4" colspan="2">
-        <widget class="QGroupBox" name="groupBox_2">
+        <widget class="QGroupBox" name="functionGroupBox">
          <property name="styleSheet">
           <string notr="true"/>
          </property>
@@ -1419,7 +1419,7 @@ QPushButton{
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
           <item row="0" column="2">
-           <widget class="QPushButton" name="btnNd_11">
+           <widget class="QPushButton" name="btnCeil">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -1449,7 +1449,7 @@ QPushButton{
            </widget>
           </item>
           <item row="1" column="2">
-           <widget class="QPushButton" name="btnNd_15">
+           <widget class="QPushButton" name="btnDeg">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -1479,7 +1479,7 @@ QPushButton{
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QPushButton" name="btnNd_14">
+           <widget class="QPushButton" name="btnDms">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -1509,7 +1509,7 @@ QPushButton{
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QPushButton" name="btnNd_10">
+           <widget class="QPushButton" name="btnFloor">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -1539,7 +1539,7 @@ QPushButton{
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QPushButton" name="btnNd_13">
+           <widget class="QPushButton" name="btnRand">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -1569,7 +1569,7 @@ QPushButton{
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="QPushButton" name="btnTriangleNd_2">
+           <widget class="QPushButton" name="btnAbs_2">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -1675,7 +1675,7 @@ QPushButton:!hover{
     <rect>
      <x>11</x>
      <y>11</y>
-     <width>716</width>
+     <width>842</width>
      <height>26</height>
     </rect>
    </property>
