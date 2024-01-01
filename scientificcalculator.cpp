@@ -105,7 +105,7 @@ int removeRightBracket(const QString &str)
 
 void ScientificCalculator::on_btnNd_clicked()
 {
-    if (Change == 0) {
+    if (ndChange == 0) {
         ui->btnSquare->setText("x³");
         ui->btnSqrt->setText("∛");
         ui->btnXy->setText("ʸ√");
@@ -115,7 +115,7 @@ void ScientificCalculator::on_btnNd_clicked()
         ui->btnNd->setStyleSheet("QPushButton:hover { " "background-color: rgb(25, 106, 167);"
                                  "font: 16pt Arial;" "} " "QPushButton { " "background-color: rgb(0, 90, 158); "
                                  "color: rgb(255, 255, 255); " "font: 12pt Arial;" "}");
-        Change = 1;
+        ndChange = 1;
     } else {
         ui->btnSquare->setText("x²");
         ui->btnSqrt->setText("√");
@@ -126,9 +126,8 @@ void ScientificCalculator::on_btnNd_clicked()
         ui->btnNd->setStyleSheet("QPushButton:hover {" "background-color: rgb(246, 246, 246);"
                                  "font: 16pt Arial;" "}" "QPushButton {" "background-color: rgb(249, 249, 249);" "font: 12pt Arial;"
                                  "}");
-        Change = 0;
+        ndChange = 0;
     }
-
 }
 
 //数字键
@@ -187,56 +186,45 @@ void ScientificCalculator::btnNumClicked()
             ui->display->setText("");
             operand = "";
         }
-        if (exp == "") {
-            if (digit == "0" && operand == "0") {
-                digit = "";
-            }
-            if (digit != "0" && operand == "0") {
-                operand = "";
-            }
-            operand += digit;
-            QString str = ui->display->text();
-            ui->display->setText(str + digit);
-        } else {
-            if (digit == "0" && exp == "0") {
-                digit = "";
-            }
-            if (digit != "0" && exp == "0") {
-                exp = "";
-            }
-            exp += digit;
-            ui->display->setText(operand + "e+" + exp);
+        if (digit == "0" && operand == "0") {
+            digit = "";
         }
+        if (digit != "0" && operand == "0") {
+            operand = "";
+        }
+        int index = operand.lastIndexOf('e');
+        //判断是否有exp操作并且为0
+        if (operand.contains('e') && operand.right(operand.size() - index - 2) == "0")
+            operand = operand.left(index + 2) + digit;
+        else
+            operand += digit;
+        ui->display->setText(operand);
     }
-    qDebug() << (digit + " btn click");
-
 }
 
 //小数点
 void ScientificCalculator::on_btnPeriod_clicked()
 {
-    //exp不能有小数点.
-    if (exp == "") {
-        //判断是否存在小数点
-        if (!operand.contains('.')) {
-            QString str = ui->display->text();
-            //判断操作数是否存在
-            if (operand == "") {
-                operand = "0.";
-                ui->display->setText("0.");
-            } else {
-                operand += '.';
-                ui->display->setText(str + '.');
-            }
-            code = "";
+    //exp不能有小数点. 判断是否存在小数点
+    if (!operand.contains('.') && !operand.contains('e')) {
+        QString str = ui->display->text();
+        //判断操作数是否存在
+        if (operand == "") {
+            operand = "0.";
+            ui->display->setText("0.");
+        } else {
+            operand += '.';
+            ui->display->setText(str + '.');
         }
+        code = "";
     }
+
 }
 
 //正负号
 void ScientificCalculator::on_btnSign_clicked()
 {
-    if (exp == "") {
+    if (!operand.contains('e')) {
         if (operand != "") {
             if (!operand.contains('-')) {
                 operand = '-' + operand;
@@ -261,22 +249,21 @@ void ScientificCalculator::on_btnSign_clicked()
             }
         }
     } else {
-        if (!exp.contains('-')) {
-            exp = '-' + exp;
-            ui->display->setText(operand + "e" + exp);
-        } else {
-            exp = exp.right(exp.size() - 1);
-            ui->display->setText(operand + "e+" + exp);
-        }
+        if (operand.contains("e-"))
+            operand.replace("e-", "e+");
+        else
+            operand.replace("e+", "e-");
+        ui->display->setText(operand);
     }
 }
+
 
 //删除键 把符号也删了
 void ScientificCalculator::on_btnDel_clicked()
 {
     //单操作符操作后的数，不能删除
     if (uniOperator != 1) {
-        if (exp == "") {
+        if (!operand.contains('e')) {
             if (operand != "") {
                 operand = operand.left(operand.size() - 1);
                 if (operand == "-")
@@ -284,13 +271,17 @@ void ScientificCalculator::on_btnDel_clicked()
                 ui->display->setText(operand);
             }
         } else {
-            exp = exp.left(exp.size() - 1);
-            if (exp == "-" || exp == "")
-                exp = "0";
-            if (exp.contains('-'))
-                ui->display->setText(operand + "e" + exp);
-            else
-                ui->display->setText(operand + "e+" + exp);
+            int index = operand.lastIndexOf('e');
+            QString exp = operand.right(operand.size() - index - 2);
+            if (exp == "0")
+                operand = operand.left(index);
+            else {
+                operand = operand.left(operand.size() - 1);
+                exp = operand.right(operand.size() - index - 1);
+                if (exp == "-" || exp == "+")
+                    operand = operand.left(index + 1) + "+0";
+            }
+            ui->display->setText(operand);
         }
     }
 }
@@ -354,6 +345,11 @@ void ScientificCalculator::btnOperatorClicked()
         //当操作数为空时，不需要将操作数放入栈里
         if (operand != "")
             operands.push(operand);
+        //当exp操作时，需要先计算
+        if (operand.contains('e')) {
+            operand = QString::number(operand.toDouble());
+            ui->display->setText(operand);
+        }
         pushCode(tempCode);
         if (uniOperator == 1)
             ui->addDisplay->setText(ui->addDisplay->text() + tempCode);
@@ -416,32 +412,34 @@ int ScientificCalculator::comparePriority(QString c)
 //等于号
 void ScientificCalculator::on_btnEqual_clicked()
 {
-    if (equal == 1)
-        return;
-    QString result = "";
-    //如果操作符不为空且操作数为空,认定display的数字为操作数
-    if (code != "" && operand == "")
-        operand = ui->display->text();
-    if (operand != "")
+    if (equal != 1) {
+        QString result = "";
+        //如果操作符不为空且操作数为空,认定display的数字为操作数
+        if (code != "" && operand == "")
+            operand = ui->display->text();
+        if (operand != "")
+            //如果有exp运算，要先运算
+            if (operand.contains('e'))
+                operand = QString::number(operand.toDouble());
         operands.push(operand);
 
-//    qDebug() << codes;
-    while (!codes.isEmpty()) {     //有操作符时
-        result = calculation();
-        operands.push(result);
+        while (!codes.isEmpty()) {     //有操作符时
+            result = calculation();
+            operands.push(result);
+        }
+        //划等号
+        //如果是单操作符运算了，不需要加操作数
+        if (uniOperator == 1)
+            ui->addDisplay->setText(ui->addDisplay->text() + "=");
+        else
+            ui->addDisplay->setText(ui->addDisplay->text() + operand + "=");
+        ui->display->setText(result);
+        operands.clear();
+        codes.clear();
+        code = "";
+        operand = result;
+        equal = 1;
     }
-    //划等号
-    //如果是单操作符运算了，不需要加操作数
-    if (uniOperator == 1)
-        ui->addDisplay->setText(ui->addDisplay->text() + "=");
-    else
-        ui->addDisplay->setText(ui->addDisplay->text() + operand + "=");
-    ui->display->setText(result);
-    operands.clear();
-    codes.clear();
-    code = "";
-    operand = result;
-    equal = 1;
 }
 
 //单操作符
@@ -467,7 +465,7 @@ void ScientificCalculator::btnUniOperatorClicked()
         resultString = str.right(str.size() - index - 1);
         str = str.left(index + 1);
     } else
-        resultString = ui->display->text();
+        resultString = QString::number(result);
     if (resultString == "") {
         resultString = "0";
         result = 0;
@@ -606,7 +604,6 @@ QString ScientificCalculator::calculation()
         } else
             result = operand1 / operand2;
     }
-//    qDebug() << operand1 << tempCode << operand2;
     return QString::number(result);
 }
 
@@ -651,9 +648,13 @@ void ScientificCalculator::on_btnRightBracket_clicked()
 
 void ScientificCalculator::on_btnExp_clicked()
 {
-    if (uniOperator != 1) {
-        ui->display->setText(ui->display->text() + "e+" + "0");
-        exp = "0";
+    if (uniOperator != 1 && code == "" && !operand.contains('e')) {
+        if (operand == "")
+            operand = "0";
+        if (operand.contains('.'))
+            operand = operand + "e+0";
+        else
+            operand = operand + ".e+0";
+        ui->display->setText(operand);
     }
 }
-
