@@ -33,6 +33,15 @@ public:
     void popCode(const QString &code);
     //去除到操作数
     void removeOperand();
+    //三角学的函数
+    void triangleCalculate(double &result, QString &op, QString &temp,
+                           QString &resultString);
+    //函数
+    void functionCalculate(double &result, QString &op, QString &temp,
+                           QString &resultString);
+    //普通单操作符
+    void standardCalculate(double &result, QString &op, QString &temp,
+                           QString &resultString);
 
 private:
     Ui::ScientificCalculator *ui;
@@ -64,6 +73,7 @@ private slots:
     void on_btnFuction_clicked();
     void on_btnTriangleNd_clicked();
     void on_btnHyp_clicked();
+    void on_btnRand_clicked();
 };
 
 #endif // SCIENTIFICCALCULATOR_H

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>458</width>
-    <height>781</height>
+    <height>739</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,6 +20,9 @@
 }
 QPushButton:hover{
 	font: 20pt &quot;Arial&quot;;
+}
+QGroupBox{
+	background-color: rgb(230, 230, 230);
 }</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
@@ -42,109 +45,15 @@ QPushButton:hover{
        <property name="sizeConstraint">
         <enum>QLayout::SetDefaultConstraint</enum>
        </property>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label">
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
+       <item row="4" column="0">
+        <widget class="QLabel" name="labelOCT">
          <property name="text">
-          <string>HEX</string>
+          <string>OCT</string>
          </property>
         </widget>
        </item>
-       <item row="12" column="0">
-        <widget class="QPushButton" name="btnDel_6">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton:hover{
-	background-color: rgb(246, 246, 246);
-}
-QPushButton:!hover{
-	background-color:rgb(249, 249, 249);
-	font: 12pt &quot;Arial&quot;;
-}</string>
-         </property>
-         <property name="text">
-          <string>E</string>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>DEC</string>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="4">
-        <widget class="QPushButton" name="btnPlus">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton:hover{
-	background-color: rgb(246, 246, 246);
-font: 30pt &quot;Arial&quot;;
-}
-QPushButton:!hover{
-	background-color:rgb(249, 249, 249);
-	font: 24pt &quot;Arial&quot;;
-}</string>
-         </property>
-         <property name="text">
-          <string>+</string>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="3">
-        <widget class="QPushButton" name="btnNum3">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton:hover{
-	background-color: rgb(252, 252, 252);
-}
-QPushButton:!hover{
-	background-color:rgb(255, 255, 255);
-}</string>
-         </property>
-         <property name="text">
-          <string>3</string>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="13" column="0">
-        <widget class="QPushButton" name="btnDel_7">
+       <item row="15" column="0">
+        <widget class="QPushButton" name="btnF">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -171,18 +80,8 @@ QPushButton:!hover{
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="text">
-          <string>BIN</string>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="1">
-        <widget class="QPushButton" name="btnNum1">
+       <item row="11" column="2">
+        <widget class="QPushButton" name="btnRightBracket">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -191,14 +90,15 @@ QPushButton:!hover{
          </property>
          <property name="styleSheet">
           <string notr="true">QPushButton:hover{
-	background-color: rgb(252, 252, 252);
+	background-color: rgb(246, 246, 246);
 }
 QPushButton:!hover{
-	background-color:rgb(255, 255, 255);
+	background-color:rgb(249, 249, 249);
+	font: 12pt &quot;Arial&quot;;
 }</string>
          </property>
          <property name="text">
-          <string>1</string>
+          <string>)</string>
          </property>
          <property name="default">
           <bool>false</bool>
@@ -208,35 +108,8 @@ QPushButton:!hover{
          </property>
         </widget>
        </item>
-       <item row="11" column="3">
-        <widget class="QPushButton" name="btnNum6">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton:hover{
-	background-color: rgb(252, 252, 252);
-}
-QPushButton:!hover{
-	background-color:rgb(255, 255, 255);
-}</string>
-         </property>
-         <property name="text">
-          <string>6</string>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
-        <widget class="QPushButton" name="btnDel_3">
+       <item row="11" column="0">
+        <widget class="QPushButton" name="btnB">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -263,8 +136,62 @@ QPushButton:!hover{
          </property>
         </widget>
        </item>
-       <item row="7" column="1">
-        <widget class="QPushButton" name="btnPercentage">
+       <item row="13" column="1">
+        <widget class="QPushButton" name="btnNum4">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(252, 252, 252);
+}
+QPushButton:!hover{
+	background-color:rgb(255, 255, 255);
+}</string>
+         </property>
+         <property name="text">
+          <string>4</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="2">
+        <widget class="QPushButton" name="btnNum8">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(252, 252, 252);
+}
+QPushButton:!hover{
+	background-color:rgb(255, 255, 255);
+}</string>
+         </property>
+         <property name="text">
+          <string>8</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="0">
+        <widget class="QPushButton" name="btnDE">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -281,7 +208,7 @@ QPushButton:!hover{
 }</string>
          </property>
          <property name="text">
-          <string>&lt;&lt;</string>
+          <string>E</string>
          </property>
          <property name="default">
           <bool>false</bool>
@@ -291,8 +218,8 @@ QPushButton:!hover{
          </property>
         </widget>
        </item>
-       <item row="13" column="3">
-        <widget class="QPushButton" name="btnPeriod">
+       <item row="12" column="0">
+        <widget class="QPushButton" name="btnC">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -301,14 +228,15 @@ QPushButton:!hover{
          </property>
          <property name="styleSheet">
           <string notr="true">QPushButton:hover{
-	background-color: rgb(252, 252, 252);
+	background-color: rgb(246, 246, 246);
 }
 QPushButton:!hover{
-	background-color:rgb(255, 255, 255);
+	background-color:rgb(249, 249, 249);
+	font: 12pt &quot;Arial&quot;;
 }</string>
          </property>
          <property name="text">
-          <string>.</string>
+          <string>C</string>
          </property>
          <property name="default">
           <bool>false</bool>
@@ -318,7 +246,7 @@ QPushButton:!hover{
          </property>
         </widget>
        </item>
-       <item row="7" column="4">
+       <item row="9" column="4">
         <widget class="QPushButton" name="btnDel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -346,36 +274,8 @@ QPushButton:!hover{
          </property>
         </widget>
        </item>
-       <item row="9" column="2">
-        <widget class="QPushButton" name="btnSquare">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton:hover{
-	background-color: rgb(246, 246, 246);
-}
-QPushButton:!hover{
-	background-color:rgb(249, 249, 249);
-	font: 12pt &quot;Arial&quot;;
-}</string>
-         </property>
-         <property name="text">
-          <string>)</string>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="1">
-        <widget class="QPushButton" name="btnInverse">
+       <item row="11" column="1">
+        <widget class="QPushButton" name="btnLeftBracket">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -393,34 +293,6 @@ QPushButton:!hover{
          </property>
          <property name="text">
           <string>(</string>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QPushButton" name="btnDel_2">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton:hover{
-	background-color: rgb(246, 246, 246);
-}
-QPushButton:!hover{
-	background-color:rgb(249, 249, 249);
-	font: 12pt &quot;Arial&quot;;
-}</string>
-         </property>
-         <property name="text">
-          <string>A</string>
          </property>
          <property name="default">
           <bool>false</bool>
@@ -476,7 +348,151 @@ QLineEdit{
          </property>
         </widget>
        </item>
-       <item row="13" column="1">
+       <item row="13" column="4">
+        <widget class="QPushButton" name="btnSub">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(246, 246, 246);
+font: 30pt &quot;Arial&quot;;
+}
+QPushButton:!hover{
+	background-color:rgb(249, 249, 249);
+	font: 24pt &quot;Arial&quot;;
+}</string>
+         </property>
+         <property name="text">
+          <string>-</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="1">
+        <widget class="QPushButton" name="btnNum1">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(252, 252, 252);
+}
+QPushButton:!hover{
+	background-color:rgb(255, 255, 255);
+}</string>
+         </property>
+         <property name="text">
+          <string>1</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QPushButton" name="btnA">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(246, 246, 246);
+}
+QPushButton:!hover{
+	background-color:rgb(249, 249, 249);
+	font: 12pt &quot;Arial&quot;;
+}</string>
+         </property>
+         <property name="text">
+          <string>A</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="2">
+        <widget class="QPushButton" name="btnNum2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(252, 252, 252);
+}
+QPushButton:!hover{
+	background-color:rgb(255, 255, 255);
+}</string>
+         </property>
+         <property name="text">
+          <string>2</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="3" colspan="2">
+        <widget class="QPushButton" name="btnBitShift">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(234, 234, 234);
+	font: 12pt &quot;Arial&quot;;
+}
+QPushButton:!hover{
+	background-color:rgb(243, 243, 243);
+font: 12pt &quot;Arial&quot;;
+}</string>
+         </property>
+         <property name="text">
+          <string>位移位</string>
+         </property>
+         <property name="icon">
+          <iconset resource="calculator.qrc">
+           <normaloff>:/image/shift.png</normaloff>:/image/shift.png</iconset>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="1">
         <widget class="QPushButton" name="btnSign">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -503,62 +519,7 @@ QPushButton:!hover{
          </property>
         </widget>
        </item>
-       <item row="7" column="2">
-        <widget class="QPushButton" name="btnClear">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton:hover{
-	background-color: rgb(246, 246, 246);
-}
-QPushButton:!hover{
-	background-color:rgb(249, 249, 249);
-	font: 12pt &quot;Arial&quot;;
-}</string>
-         </property>
-         <property name="text">
-          <string>&gt;&gt;</string>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="3">
-        <widget class="QPushButton" name="btnNum9">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton:hover{
-	background-color: rgb(252, 252, 252);
-}
-QPushButton:!hover{
-	background-color:rgb(255, 255, 255);
-}</string>
-         </property>
-         <property name="text">
-          <string>9</string>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="4">
+       <item row="11" column="4">
         <widget class="QPushButton" name="btnDivide">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -587,7 +548,207 @@ QPushButton:!hover{
          </property>
         </widget>
        </item>
-       <item row="13" column="4">
+       <item row="12" column="1">
+        <widget class="QPushButton" name="btnNum7">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(252, 252, 252);
+}
+QPushButton:!hover{
+	background-color:rgb(255, 255, 255);
+}</string>
+         </property>
+         <property name="text">
+          <string>7</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="4">
+        <widget class="QPushButton" name="btnPlus">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(246, 246, 246);
+font: 30pt &quot;Arial&quot;;
+}
+QPushButton:!hover{
+	background-color:rgb(249, 249, 249);
+	font: 24pt &quot;Arial&quot;;
+}</string>
+         </property>
+         <property name="text">
+          <string>+</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="3">
+        <widget class="QPushButton" name="btnNum9">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(252, 252, 252);
+}
+QPushButton:!hover{
+	background-color:rgb(255, 255, 255);
+}</string>
+         </property>
+         <property name="text">
+          <string>9</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="2">
+        <widget class="QPushButton" name="btnNum0">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(252, 252, 252);
+}
+QPushButton:!hover{
+	background-color:rgb(255, 255, 255);
+}</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="4">
+        <widget class="QPushButton" name="btnMul">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(246, 246, 246);
+font: 30pt &quot;Arial&quot;;
+}
+QPushButton:!hover{
+	background-color:rgb(249, 249, 249);
+	font: 24pt &quot;Arial&quot;;
+}</string>
+         </property>
+         <property name="text">
+          <string>×</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1" colspan="4">
+        <widget class="QLineEdit" name="lineEditDEC">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="2">
+        <widget class="QPushButton" name="btnNum5">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(252, 252, 252);
+}
+QPushButton:!hover{
+	background-color:rgb(255, 255, 255);
+}</string>
+         </property>
+         <property name="text">
+          <string>5</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="3">
+        <widget class="QPushButton" name="btnPeriod">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(252, 252, 252);
+}
+QPushButton:!hover{
+	background-color:rgb(255, 255, 255);
+}</string>
+         </property>
+         <property name="text">
+          <string>.</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="4">
         <widget class="QPushButton" name="btnEqual">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -623,42 +784,25 @@ QPushButton:!hover{
          </property>
         </widget>
        </item>
-       <item row="13" column="2">
-        <widget class="QPushButton" name="btnNum0">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton:hover{
-	background-color: rgb(252, 252, 252);
-}
-QPushButton:!hover{
-	background-color:rgb(255, 255, 255);
-}</string>
-         </property>
-         <property name="text">
-          <string>0</string>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1" colspan="4">
-        <widget class="QLineEdit" name="lineEdit">
+       <item row="4" column="1" colspan="4">
+        <widget class="QLineEdit" name="lineEditOCT">
          <property name="enabled">
           <bool>false</bool>
          </property>
         </widget>
        </item>
-       <item row="12" column="2">
-        <widget class="QPushButton" name="btnNum2">
+       <item row="5" column="0">
+        <widget class="QLabel" name="labelBIN">
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>BIN</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="3">
+        <widget class="QPushButton" name="btnBitwise">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -667,302 +811,30 @@ QPushButton:!hover{
          </property>
          <property name="styleSheet">
           <string notr="true">QPushButton:hover{
-	background-color: rgb(252, 252, 252);
+	background-color: rgb(234, 234, 234);
+font: 12pt &quot;Arial&quot;;
 }
 QPushButton:!hover{
-	background-color:rgb(255, 255, 255);
+	background-color:rgb(243, 243, 243);
+	font: 12pt &quot;Arial&quot;;
 }</string>
          </property>
          <property name="text">
-          <string>2</string>
+          <string>按位</string>
+         </property>
+         <property name="icon">
+          <iconset resource="calculator.qrc">
+           <normaloff>:/image/nand-gate.png</normaloff>:/image/nand-gate.png</iconset>
          </property>
          <property name="default">
           <bool>false</bool>
          </property>
          <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="4">
-        <widget class="QPushButton" name="btnSub">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton:hover{
-	background-color: rgb(246, 246, 246);
-font: 30pt &quot;Arial&quot;;
-}
-QPushButton:!hover{
-	background-color:rgb(249, 249, 249);
-	font: 24pt &quot;Arial&quot;;
-}</string>
-         </property>
-         <property name="text">
-          <string>-</string>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>OCT</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1" colspan="4">
-        <widget class="QLineEdit" name="lineEdit_4">
-         <property name="enabled">
           <bool>false</bool>
          </property>
         </widget>
        </item>
        <item row="9" column="3">
-        <widget class="QPushButton" name="btnSqrt">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton:hover{
-	background-color: rgb(246, 246, 246);
-}
-QPushButton:!hover{
-	background-color:rgb(249, 249, 249);
-	font: 12pt &quot;Arial&quot;;
-}</string>
-         </property>
-         <property name="text">
-          <string>%</string>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="2">
-        <widget class="QPushButton" name="btnNum5">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton:hover{
-	background-color: rgb(252, 252, 252);
-}
-QPushButton:!hover{
-	background-color:rgb(255, 255, 255);
-}</string>
-         </property>
-         <property name="text">
-          <string>5</string>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="1">
-        <widget class="QPushButton" name="btnNum7">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton:hover{
-	background-color: rgb(252, 252, 252);
-}
-QPushButton:!hover{
-	background-color:rgb(255, 255, 255);
-}</string>
-         </property>
-         <property name="text">
-          <string>7</string>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="2">
-        <widget class="QPushButton" name="btnNum8">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton:hover{
-	background-color: rgb(252, 252, 252);
-}
-QPushButton:!hover{
-	background-color:rgb(255, 255, 255);
-}</string>
-         </property>
-         <property name="text">
-          <string>8</string>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="1">
-        <widget class="QPushButton" name="btnNum4">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton:hover{
-	background-color: rgb(252, 252, 252);
-}
-QPushButton:!hover{
-	background-color:rgb(255, 255, 255);
-}</string>
-         </property>
-         <property name="text">
-          <string>4</string>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="4">
-        <widget class="QPushButton" name="btnMul">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton:hover{
-	background-color: rgb(246, 246, 246);
-font: 30pt &quot;Arial&quot;;
-}
-QPushButton:!hover{
-	background-color:rgb(249, 249, 249);
-	font: 24pt &quot;Arial&quot;;
-}</string>
-         </property>
-         <property name="text">
-          <string>×</string>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="0">
-        <widget class="QPushButton" name="btnDel_5">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton:hover{
-	background-color: rgb(246, 246, 246);
-}
-QPushButton:!hover{
-	background-color:rgb(249, 249, 249);
-	font: 12pt &quot;Arial&quot;;
-}</string>
-         </property>
-         <property name="text">
-          <string>D</string>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1" colspan="4">
-        <widget class="QLineEdit" name="lineEdit_3">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="0">
-        <widget class="QPushButton" name="btnDel_4">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton:hover{
-	background-color: rgb(246, 246, 246);
-}
-QPushButton:!hover{
-	background-color:rgb(249, 249, 249);
-	font: 12pt &quot;Arial&quot;;
-}</string>
-         </property>
-         <property name="text">
-          <string>C</string>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1" colspan="4">
-        <widget class="QLineEdit" name="lineEdit_2">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="3">
         <widget class="QPushButton" name="btnClearAll">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -990,62 +862,357 @@ QPushButton:!hover{
          </property>
         </widget>
        </item>
-       <item row="6" column="0" colspan="2">
-        <widget class="QComboBox" name="comboBox">
-         <item>
-          <property name="text">
-           <string>AND</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>OR</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>NOT</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>NAND</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>NOR</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>XOR</string>
-          </property>
-         </item>
+       <item row="13" column="3">
+        <widget class="QPushButton" name="btnNum6">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(252, 252, 252);
+}
+QPushButton:!hover{
+	background-color:rgb(255, 255, 255);
+}</string>
+         </property>
+         <property name="text">
+          <string>6</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
         </widget>
        </item>
-       <item row="6" column="2" colspan="2">
-        <widget class="QComboBox" name="comboBox_2">
-         <item>
-          <property name="text">
-           <string>算术移位</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>逻辑移位</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>旋转循环移位</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>带进位旋转循环移位</string>
-          </property>
-         </item>
+       <item row="5" column="1" colspan="4">
+        <widget class="QLineEdit" name="lineEditBIN">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <widget class="QPushButton" name="btnLeftShift">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(246, 246, 246);
+}
+QPushButton:!hover{
+	background-color:rgb(249, 249, 249);
+	font: 12pt &quot;Arial&quot;;
+}</string>
+         </property>
+         <property name="text">
+          <string>&lt;&lt;</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="3">
+        <widget class="QPushButton" name="btnPercentage">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(246, 246, 246);
+}
+QPushButton:!hover{
+	background-color:rgb(249, 249, 249);
+	font: 12pt &quot;Arial&quot;;
+}</string>
+         </property>
+         <property name="text">
+          <string>%</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="labelHEX">
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>HEX</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="2">
+        <widget class="QPushButton" name="btnRightShift">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(246, 246, 246);
+}
+QPushButton:!hover{
+	background-color:rgb(249, 249, 249);
+	font: 12pt &quot;Arial&quot;;
+}</string>
+         </property>
+         <property name="text">
+          <string>&gt;&gt;</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" colspan="4">
+        <widget class="QLineEdit" name="lineEditHEX">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="3">
+        <widget class="QPushButton" name="btnNum3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(252, 252, 252);
+}
+QPushButton:!hover{
+	background-color:rgb(255, 255, 255);
+}</string>
+         </property>
+         <property name="text">
+          <string>3</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="labelDEC">
+         <property name="text">
+          <string>DEC</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="0">
+        <widget class="QPushButton" name="btnD">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover{
+	background-color: rgb(246, 246, 246);
+}
+QPushButton:!hover{
+	background-color:rgb(249, 249, 249);
+	font: 12pt &quot;Arial&quot;;
+}</string>
+         </property>
+         <property name="text">
+          <string>D</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" rowspan="2" colspan="3">
+        <widget class="QGroupBox" name="groupBoxAnd">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="1" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QPushButton" name="btnNAND">
+              <property name="styleSheet">
+               <string notr="true">QPushButton:hover{
+	background-color: rgb(238, 238, 238);
+	font: 15pt &quot;Arial&quot;;
+}
+QPushButton:!hover{
+	background-color:rgb(243, 243, 243);
+	font: 15pt &quot;Arial&quot;;
+}</string>
+              </property>
+              <property name="text">
+               <string>NAND</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnNOR">
+              <property name="styleSheet">
+               <string notr="true">QPushButton:hover{
+	background-color: rgb(238, 238, 238);
+	font: 15pt &quot;Arial&quot;;
+}
+QPushButton:!hover{
+	background-color:rgb(243, 243, 243);
+	font: 15pt &quot;Arial&quot;;
+}</string>
+              </property>
+              <property name="text">
+               <string>NOR</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnXOR">
+              <property name="styleSheet">
+               <string notr="true">QPushButton:hover{
+	background-color: rgb(238, 238, 238);
+	font: 15pt &quot;Arial&quot;;
+}
+QPushButton:!hover{
+	background-color:rgb(243, 243, 243);
+	font: 15pt &quot;Arial&quot;;
+}</string>
+              </property>
+              <property name="text">
+               <string>XOR</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QPushButton" name="btnAND">
+              <property name="styleSheet">
+               <string notr="true">QPushButton:hover{
+	background-color: rgb(238, 238, 238);
+	font: 15pt &quot;Arial&quot;;
+}
+QPushButton:!hover{
+	background-color:rgb(243, 243, 243);
+	font: 15pt &quot;Arial&quot;;
+}</string>
+              </property>
+              <property name="text">
+               <string>AND</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnOR">
+              <property name="styleSheet">
+               <string notr="true">QPushButton:hover{
+	background-color: rgb(238, 238, 238);
+	font: 15pt &quot;Arial&quot;;
+}
+QPushButton:!hover{
+	background-color:rgb(243, 243, 243);
+	font: 15pt &quot;Arial&quot;;
+}</string>
+              </property>
+              <property name="text">
+               <string>OR</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnNOT">
+              <property name="styleSheet">
+               <string notr="true">QPushButton:hover{
+	background-color: rgb(238, 238, 238);
+	font: 15pt &quot;Arial&quot;;
+}
+QPushButton:!hover{
+	background-color:rgb(243, 243, 243);
+	font: 15pt &quot;Arial&quot;;
+}</string>
+              </property>
+              <property name="text">
+               <string>NOT</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="7" column="3" rowspan="2" colspan="2">
+        <widget class="QGroupBox" name="groupBoxShift">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="2" column="0">
+           <widget class="QRadioButton" name="radioRotational">
+            <property name="text">
+             <string>旋转循环移位</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="radioLogical">
+            <property name="text">
+             <string>逻辑移位</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="radioArithmetic">
+            <property name="text">
+             <string>算术移位</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QRadioButton" name="radioCarry">
+            <property name="text">
+             <string>带进位旋转循环移位</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
@@ -1058,7 +1225,7 @@ QPushButton:!hover{
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>409</width>
+     <width>458</width>
      <height>26</height>
     </rect>
    </property>
@@ -1074,6 +1241,8 @@ QPushButton:!hover{
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="calculator.qrc"/>
+ </resources>
  <connections/>
 </ui>

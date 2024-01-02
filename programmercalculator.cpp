@@ -12,3 +12,15 @@ ProgrammerCalculator::~ProgrammerCalculator()
 {
     delete ui;
 }
+
+void ProgrammerCalculator::on_btnBitwise_clicked()
+{
+
+}
+
+
+void ProgrammerCalculator::on_btnBitShift_clicked()
+{
+
+}
+

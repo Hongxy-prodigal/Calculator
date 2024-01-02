@@ -12,5 +12,8 @@
         <file>image/weight.png</file>
         <file>image/function.png</file>
         <file>image/triangle.png</file>
+        <file>image/nand-gate.png</file>
+        <file>image/shift.png</file>
+        <file>image/nand-gate1.png</file>
     </qresource>
 </RCC>

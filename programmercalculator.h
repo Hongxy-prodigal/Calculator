@@ -15,6 +15,11 @@ public:
     explicit ProgrammerCalculator(QWidget *parent = nullptr);
     ~ProgrammerCalculator();
 
+private slots:
+    void on_btnBitwise_clicked();
+
+    void on_btnBitShift_clicked();
+
 private:
     Ui::ProgrammerCalculator *ui;
 };

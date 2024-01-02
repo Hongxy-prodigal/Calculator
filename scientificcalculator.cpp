@@ -61,7 +61,19 @@ ScientificCalculator::ScientificCalculator(QWidget *parent) :
     connect(ui->btnAbs, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
     connect(ui->btnFactorial, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
     connect(ui->btnLog, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
-
+    //三角函数
+    connect(ui->btnSin, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
+    connect(ui->btnCos, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
+    connect(ui->btnTan, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
+    connect(ui->btnSec, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
+    connect(ui->btnCsc, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
+    connect(ui->btnCot, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
+    //函数
+    connect(ui->btnAbs_2, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
+    connect(ui->btnFloor, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
+    connect(ui->btnCeil, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
+    connect(ui->btnDeg, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
+    connect(ui->btnDms, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
 }
 
 ScientificCalculator::~ScientificCalculator()
@@ -105,6 +117,7 @@ int removeRightBracket(const QString &str)
     }
     return index;
 }
+
 //三角函数隐藏与显示
 void ScientificCalculator::on_btnTriangle_clicked()
 {
@@ -264,7 +277,7 @@ void ScientificCalculator::btnNumClicked()
 void ScientificCalculator::on_btnPeriod_clicked()
 {
     //exp不能有小数点. 判断是否存在小数点
-    if (!operand.contains('.') && !operand.contains('e')) {
+    if (!operand.contains('.') && !operand.contains('e') && uniOperator == 0) {
         QString str = ui->display->text();
         //判断操作数是否存在
         if (operand == "") {
@@ -526,71 +539,9 @@ void ScientificCalculator::btnUniOperatorClicked()
         resultString = "0";
         result = 0;
     }
-    if (op == "x²") {
-        temp = "sqr(" + resultString + ")";
-        result = result * result;
-    } else if (op == "√") {
-        if (result < 0) {
-            operands.clear();
-            codes.clear();
-            operand = "";
-            code = "";
-            ui->display->setText("无效输入");
-            return;
-        }
-        temp = "√(" + resultString + ")";
-        result = sqrt(result);
-    } else if (op == "10ˣ") {
-        temp = "10^(" + resultString + ")";
-        result = qPow(10, result);
-    } else if (op == "ln") {
-        temp = "ln(" + resultString + ")";
-        result = qLn(result);
-    } else if (op == "1/x") {
-        if (result == 0) {
-            operands.clear();
-            codes.clear();
-            operand = "";
-            code = "";
-            ui->display->setText("除数不能为零");
-            return;
-        }
-        temp = "1/(" + resultString + ")";
-        result = 1 / result;
-    } else if (op == "|x|") {
-        temp = "abs(" + resultString + ")";
-        result = qFabs(result);
-    } else if (op == "log") {
-        temp = "log(" + resultString + ")";
-        result = qLn(result) / qLn(10);
-    } else if (op == "x³") {
-        temp = "cube(" + resultString + ")";
-        result = result * result * result;
-    } else if (op == "∛") {
-        temp = "cuberoot(" + resultString + ")";
-        result = qPow(result, 1 / 3);
-    } else if (op == "2ˣ") {
-        temp = "2^(" + resultString + ")";
-        result = qPow(2, result);
-    } else if (op == "eˣ") {
-        temp = "e^(" + resultString + ")";
-        result = qPow(M_E, result);
-    } else if (op == "n!") {
-        temp = "fact(" + resultString + ")";
-        if (result < 0) {
-            operands.clear();
-            codes.clear();
-            operand = "";
-            code = "";
-            ui->display->setText("无效输入");
-            return;
-        } else if (result == 0 || result == 1) {
-            result = 1;
-        } else {
-            for (int i = 2; i <= result; i++)
-                result *= i;
-        }
-    }
+    standardCalculate(result, op, temp, resultString);
+    triangleCalculate(result, op, temp, resultString);
+    functionCalculate(result, op, temp, resultString);
     //判断当前数字是结果还是操作数
     if (operand == "" && ui->addDisplay->text().right(1) == "=") {
         ui->addDisplay->setText(temp);
@@ -713,3 +664,189 @@ void ScientificCalculator::on_btnExp_clicked()
         ui->display->setText(operand);
     }
 }
+
+void ScientificCalculator::on_btnRand_clicked()
+{
+    srand(time(nullptr));
+    // 生成随机数
+    double randomNumber = static_cast<double>(rand()) / RAND_MAX;
+    operand  = QString::number(randomNumber);
+    ui->display->setText(operand);
+}
+
+void ScientificCalculator::triangleCalculate(double &result, QString &op, QString &temp,
+                                             QString &resultString)
+{
+    //正常的三角函数
+    if (op == "sin") {
+        temp = "sin(" + resultString + ")";
+        result = sin(result);
+    }  else if (op == "cos") {
+        temp = "cos(" + resultString + ")";
+        result = cos(result);
+    } else if (op == "tan") {
+        temp = "tan(" + resultString + ")";
+        result = tan(result);
+    } else if (op == "sec") {
+        temp = "sec(" + resultString + ")";
+        result = 1 / cos(result);
+    } else if (op == "csc") {
+        temp = "csc(" + resultString + ")";
+        result = 1 / sin(result);
+    } else if (op == "cot") {
+        temp = "cot(" + resultString + ")";
+        result = 1 / tan(result);
+    }
+
+    //双曲三角函数
+    else if (op == "sinh") {
+        temp = "sinh(" + resultString + ")";
+        result = sinh(result);
+    }  else if (op == "cosh") {
+        temp = "cosh(" + resultString + ")";
+        result = cosh(result);
+    } else if (op == "tanh") {
+        temp = "tanh(" + resultString + ")";
+        result = tanh(result);
+    } else if (op == "sech") {
+        temp = "sech(" + resultString + ")";
+        result = 1 / cosh(result);
+    } else if (op == "csch") {
+        temp = "csch(" + resultString + ")";
+        result = 1 / sinh(result);
+    } else if (op == "coth") {
+        temp = "coth(" + resultString + ")";
+        result = 1 / tanh(result);
+    }
+
+    //反函数
+    else if (op == "sin⁻¹") {
+        temp = "sin⁻¹(" + resultString + ")";
+        result = asin(result);
+    }  else if (op == "cos⁻¹") {
+        temp = "cos⁻¹(" + resultString + ")";
+        result = acos(result);
+    } else if (op == "tan⁻¹") {
+        temp = "tan⁻¹(" + resultString + ")";
+        result = atan(result);
+    } else if (op == "sec⁻¹") {
+        temp = "sec⁻¹(" + resultString + ")";
+        result = acos(1 / result);
+    } else if (op == "csc⁻¹") {
+        temp = "csc⁻¹(" + resultString + ")";
+        result = asin(1 / result);
+    } else if (op == "cot⁻¹") {
+        temp = "cot⁻¹(" + resultString + ")";
+        result = atan(1 / result);
+    }
+
+    //反双曲函数
+    else if (op == "sinh⁻¹") {
+        temp = "sinh⁻¹(" + resultString + ")";
+        result = asinh(result);
+    }  else if (op == "cosh⁻¹") {
+        temp = "cosh⁻¹(" + resultString + ")";
+        result = acosh(result);
+    } else if (op == "tanh⁻¹") {
+        temp = "tanh⁻¹(" + resultString + ")";
+        result = atanh(result);
+    } else if (op == "sech⁻¹") {
+        temp = "sech⁻¹(" + resultString + ")";
+        result = acosh(1 / result);
+    } else if (op == "csch⁻¹") {
+        temp = "csch⁻¹(" + resultString + ")";
+        result = asinh(1 / result);
+    } else if (op == "coth⁻¹") {
+        temp = "coth⁻¹(" + resultString + ")";
+        result = atanh(1 / result);
+    }
+}
+
+void ScientificCalculator::functionCalculate(double &result, QString &op, QString &temp,
+                                             QString &resultString)
+{
+    if (op == "⌊x⌋") {
+        temp = "floor(" + resultString + ")";
+        result = floor(result);
+    }  else if (op == "⌈x⌉") {
+        temp = "ceil(" + resultString + ")";
+        result = ceil(result);
+    } else if (op == "→dms") {
+        temp = "dms(" + resultString + ")";
+        result = result * (M_PI / 180.0);  ;
+    } else if (op == "→deg") {
+        temp = "deg(" + resultString + ")";
+        result = result * (180.0 / M_PI);
+    }
+}
+
+void ScientificCalculator::standardCalculate(double &result, QString &op, QString &temp,
+                                             QString &resultString)
+{
+    if (op == "x²") {
+        temp = "sqr(" + resultString + ")";
+        result = result * result;
+    } else if (op == "√") {
+        if (result < 0) {
+            operands.clear();
+            codes.clear();
+            operand = "";
+            code = "";
+            ui->display->setText("无效输入");
+            return;
+        }
+        temp = "√(" + resultString + ")";
+        result = sqrt(result);
+    } else if (op == "10ˣ") {
+        temp = "10^(" + resultString + ")";
+        result = qPow(10, result);
+    } else if (op == "ln") {
+        temp = "ln(" + resultString + ")";
+        result = qLn(result);
+    } else if (op == "1/x") {
+        if (result == 0) {
+            operands.clear();
+            codes.clear();
+            operand = "";
+            code = "";
+            ui->display->setText("除数不能为零");
+            return;
+        }
+        temp = "1/(" + resultString + ")";
+        result = 1 / result;
+    } else if (op == "|x|") {
+        temp = "abs(" + resultString + ")";
+        result = qFabs(result);
+    } else if (op == "log") {
+        temp = "log(" + resultString + ")";
+        result = qLn(result) / qLn(10);
+    } else if (op == "x³") {
+        temp = "cube(" + resultString + ")";
+        result = result * result * result;
+    } else if (op == "∛") {
+        temp = "cuberoot(" + resultString + ")";
+        result = qPow(result, 1 / 3);
+    } else if (op == "2ˣ") {
+        temp = "2^(" + resultString + ")";
+        result = qPow(2, result);
+    } else if (op == "eˣ") {
+        temp = "e^(" + resultString + ")";
+        result = qPow(M_E, result);
+    } else if (op == "n!") {
+        temp = "fact(" + resultString + ")";
+        if (result < 0) {
+            operands.clear();
+            codes.clear();
+            operand = "";
+            code = "";
+            ui->display->setText("无效输入");
+            return;
+        } else if (result == 0 || result == 1) {
+            result = 1;
+        } else {
+            for (int i = 2; i <= result; i++)
+                result *= i;
+        }
+    }
+}
+
