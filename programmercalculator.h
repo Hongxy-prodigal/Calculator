@@ -32,6 +32,11 @@ public:
     void pushCode(const QString &tempCode);
     //比较优先级
     int comparePriority(QString c);
+    //显示所有进制
+    void setAllDisplay(const QString &str);
+    //清楚所有进制
+    void clearAllDisplay();
+
 
 private:
     Ui::ProgrammerCalculator *ui;

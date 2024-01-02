@@ -612,7 +612,7 @@ QString ScientificCalculator::calculation()
             codes.clear();
             return "除数不能为零";
         } else
-            result = operand1 / operand2;
+            result = operand2 / operand1;
     }
     return QString::number(result);
 }

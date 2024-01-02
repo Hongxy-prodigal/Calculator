@@ -10,7 +10,6 @@ ProgrammerCalculator::ProgrammerCalculator(QWidget *parent) :
     ui->setupUi(this);
     ui->groupBoxShift->setVisible(false);
     ui->groupBoxBitwise->setVisible(false);
-    ui->btnPeriod->setEnabled(false);
     keyBtns = {
         {Qt::Key_0, ui->btnNum0},
         {Qt::Key_1, ui->btnNum1},
@@ -48,6 +47,7 @@ ProgrammerCalculator::ProgrammerCalculator(QWidget *parent) :
     connect(ui->btnSub, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
     connect(ui->btnMul, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
     connect(ui->btnDivide, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
+    connect(ui->btnMod, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
     //进制转换
     connect(ui->btnHEX, SIGNAL(clicked()), this, SLOT(btnBaseClicked()));
     connect(ui->btnDEC, SIGNAL(clicked()), this, SLOT(btnBaseClicked()));
@@ -95,6 +95,26 @@ void ProgrammerCalculator::btnBaseClicked()
         }
         i++;
     }
+}
+
+//在所有进制中都要显示
+void ProgrammerCalculator::setAllDisplay(const QString &str)
+{
+    ui->display->setText(str);
+    int dec = str.toInt();
+    ui->lineEditBIN->setText(QString::number(dec, 2));
+    ui->lineEditOCT->setText(QString::number(dec, 8));
+    ui->lineEditDEC->setText(QString::number(dec, 10));
+    ui->lineEditHEX->setText(QString::number(dec, 16));
+}
+
+void ProgrammerCalculator::clearAllDisplay()
+{
+    ui->display->setText("");
+    ui->lineEditBIN->setText("");
+    ui->lineEditOCT->setText("");
+    ui->lineEditDEC->setText("");
+    ui->lineEditHEX->setText("");
 }
 
 //删除右括号接数字的括号
@@ -173,7 +193,7 @@ void ProgrammerCalculator::btnNumClicked()
         operand = "";
     }
     operand += digit;
-    ui->display->setText(operand);
+    setAllDisplay(operand);
 }
 
 //删除键 把符号也删了
@@ -183,7 +203,7 @@ void ProgrammerCalculator::on_btnDel_clicked()
         operand = operand.left(operand.size() - 1);
         if (operand == "-")
             operand = "";
-        ui->display->setText(operand);
+        setAllDisplay(operand);
     }
 }
 
@@ -202,13 +222,13 @@ void ProgrammerCalculator::on_btnClearAll_clicked()
         code = "";
         operands.clear();
         codes.clear();
-        ui->display->setText("");
         ui->addDisplay->setText("");
     }
     //清楚当前操作数
     else {
         operand = "";
         ui->display->setText("");
+        clearAllDisplay();
     }
 }
 
@@ -216,26 +236,29 @@ void ProgrammerCalculator::on_btnClearAll_clicked()
 void ProgrammerCalculator::on_btnSign_clicked()
 {
 
-    if (operand != "") {
-        if (!operand.contains('-')) {
-            operand = '-' + operand;
-        } else {
-            operand = operand.right(operand.size() - 1);
-        }
-        ui->display->setText(operand);
-        //如果是对以及被单操作符操作过的操作数，则要用negate()
-//        if (uniOperator == 1) {
-//            QString str = ui->addDisplay->text();
-//            int index = getLastOperator(str);
-//            QString resultString = str.right(str.size() - index - 1);
-//            str = str.left(index + 1);
-//            resultString = "negate(" + resultString + ")";
+    if (Base == 10) {
+        if (operand != "") {
+            if (!operand.contains('-')) {
+                operand = '-' + operand;
+            } else {
+                operand = operand.right(operand.size() - 1);
+            }
+            setAllDisplay(operand);
 
-//            if (operand == "" && ui->addDisplay->text().right(1) == "=") {
-//                ui->addDisplay->setText(resultString);
-//            } else {
-//                ui->addDisplay->setText(str + resultString);
-//            }
+        }
+    }
+    //如果是除十进制以外的，则要用negate()
+    else {
+//        QString str = ui->addDisplay->text();
+//        int index = getLastOperator(str);
+//        QString resultString = str.right(str.size() - index - 1);
+//        str = str.left(index + 1);
+//        resultString = "negate(" + resultString + ")";
+
+//        if (operand == "" && ui->addDisplay->text().right(1) == "=") {
+//            ui->addDisplay->setText(resultString);
+//        } else {
+//            ui->addDisplay->setText(str + resultString);
 //        }
     }
 }
@@ -250,6 +273,8 @@ void ProgrammerCalculator::on_btnEqual_clicked()
             operand = ui->display->text();
         if (operand == "")
             operand = "0";
+        //可以考虑将堆栈改为int
+        operand = QString::number(operand.toInt());
         operands.push(operand);
 
         while (!codes.isEmpty()) {     //有操作符时
@@ -259,7 +284,7 @@ void ProgrammerCalculator::on_btnEqual_clicked()
 
         //划等号
         ui->addDisplay->setText(ui->addDisplay->text() + operand + "=");
-        ui->display->setText(result);
+        setAllDisplay(result);
         operands.clear();
         codes.clear();
         code = "";
@@ -274,7 +299,7 @@ void ProgrammerCalculator::btnOperatorClicked()
     QString tempCode = qobject_cast<QPushButton *>(sender())->text();
     if (equal == 1) {
         equal = 0;
-        ui->addDisplay->setText("");
+        setAllDisplay("");
     }
     if (code != "") {        //避免多次使用操作符
         QString previousCode = codes.pop();
@@ -306,7 +331,7 @@ void ProgrammerCalculator::pushCode(const QString &tempCode)
     qDebug() << codes;
     qDebug() << operands;
     QString result;
-    if (tempCode == "×" || tempCode == "÷" || tempCode == "+" || tempCode == "-") {
+    if (tempCode == "×" || tempCode == "÷" || tempCode == "+" || tempCode == "-" || tempCode == "%") {
         if (codes.empty() || codes.top() == '(') {
             codes.push(tempCode);
         } else {
@@ -316,7 +341,7 @@ void ProgrammerCalculator::pushCode(const QString &tempCode)
                     result = calculation();
                     operands.push(result);
                 }
-                ui->display->setText(result);
+                setAllDisplay(result);
                 calculated = 1;
             }
             codes.push(tempCode);
@@ -329,7 +354,7 @@ void ProgrammerCalculator::pushCode(const QString &tempCode)
             result = calculation();
             operands.push(result);
         }
-        ui->display->setText(result);
+        setAllDisplay(result);
         //出栈"("
         codes.pop();
     }
@@ -342,7 +367,7 @@ int ProgrammerCalculator::comparePriority(QString c)
 {
     if (c == "+" || c == "-")
         return 1;
-    else if (c == "×" || c == "÷")
+    else if (c == "×" || c == "÷" || c == "%")
         return 2;
     else
         return 0;
@@ -351,17 +376,19 @@ int ProgrammerCalculator::comparePriority(QString c)
 //计算
 QString ProgrammerCalculator::calculation()
 {
-    double result = 0;
+    int result = 0;
     QString tempCode = codes.pop();
-    double operand1 = operands.pop().toDouble();
-    double operand2 = operands.pop().toDouble();
+    int operand1 = operands.pop().toInt();
+    int operand2 = operands.pop().toInt();
     if (tempCode == "+") {
         result = operand1 + operand2;
     } else if (tempCode == "-") {
         result = operand2 - operand1;
     } else if (tempCode == "×") {
         result = operand1 * operand2;
-    } else if (tempCode == "÷") {
+    } else if (tempCode == "%") {
+        result = operand2 % operand1;
+    }  else if (tempCode == "÷") {
         if (operand2 == 0) {
             operand = "";
             code = "";
@@ -369,7 +396,7 @@ QString ProgrammerCalculator::calculation()
             codes.clear();
             return "除数不能为零";
         } else
-            result = operand1 / operand2;
+            result = operand2 / operand1;
     }
     return QString::number(result);
 }
