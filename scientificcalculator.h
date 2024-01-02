@@ -65,7 +65,7 @@ private slots:
     void on_btnEqual_clicked();
     void btnUniOperatorClicked();
     void keyPressEvent(QKeyEvent *event);
-    void on_display_textChanged(const QString &arg1);   //变换C CE
+    void on_display_textChanged();   //变换C CE
     void on_btnLeftBracket_clicked();
     void on_btnRightBracket_clicked();
     void on_btnExp_clicked();

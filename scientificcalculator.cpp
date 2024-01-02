@@ -161,7 +161,7 @@ void ScientificCalculator::on_btnNd_clicked()
 void ScientificCalculator::on_btnTriangleNd_clicked()
 {
     if (ndTriangle == 0) {
-        for (QPushButton *button : ui->triangleGroupBox->findChildren<QPushButton *>())
+        for (auto &button : ui->triangleGroupBox->findChildren<QPushButton *>())
             if (button->text() != "2nd" && button->text() != "hyp")
                 button->setText(button->text() + "⁻¹");
         ui->btnTriangleNd->setStyleSheet("QPushButton:hover { " "background-color: rgb(24, 105, 166);"
@@ -169,7 +169,7 @@ void ScientificCalculator::on_btnTriangleNd_clicked()
                                          "color: rgb(255, 255, 255); " "font: 13pt Arial;" "}");
         ndTriangle = 1;
     } else {
-        for (QPushButton *button : ui->triangleGroupBox->findChildren<QPushButton *>())
+        for (auto &button : ui->triangleGroupBox->findChildren<QPushButton *>())
             if (button->text() != "2nd" && button->text() != "hyp")
                 button->setText(button->text().remove("⁻¹"));
         ui->btnTriangleNd->setStyleSheet("QPushButton:hover {" "background-color: rgb(241, 241, 241);"
@@ -183,7 +183,7 @@ void ScientificCalculator::on_btnTriangleNd_clicked()
 void ScientificCalculator::on_btnHyp_clicked()
 {
     if (hyp == 0) {
-        for (QPushButton *button : ui->triangleGroupBox->findChildren<QPushButton *>())
+        for (auto &button : ui->triangleGroupBox->findChildren<QPushButton *>())
             if (button->text() != "2nd" && button->text() != "hyp")
                 button->setText(button->text().insert(3, 'h'));
         ui->btnHyp->setStyleSheet("QPushButton:hover { " "background-color: rgb(24, 105, 166);"
@@ -191,7 +191,7 @@ void ScientificCalculator::on_btnHyp_clicked()
                                   "color: rgb(255, 255, 255); " "font: 13pt Arial;" "}");
         hyp = 1;
     } else {
-        for (QPushButton *button : ui->triangleGroupBox->findChildren<QPushButton *>())
+        for (auto &button : ui->triangleGroupBox->findChildren<QPushButton *>())
             if (button->text() != "2nd" && button->text() != "hyp")
                 button->setText(button->text().remove("h"));
         ui->btnHyp->setStyleSheet("QPushButton:hover {" "background-color: rgb(241, 241, 241);"
@@ -295,7 +295,7 @@ void ScientificCalculator::on_btnPeriod_clicked()
 //正负号
 void ScientificCalculator::on_btnSign_clicked()
 {
-    if (!operand.contains('e')) {
+    if (!operand.contains('e') && calculated == 0) {
         if (operand != "") {
             if (!operand.contains('-')) {
                 operand = '-' + operand;
@@ -357,7 +357,7 @@ void ScientificCalculator::on_btnDel_clicked()
 }
 
 //关于清空
-void ScientificCalculator::on_display_textChanged(const QString &arg1)
+void ScientificCalculator::on_display_textChanged()
 {
     if (ui->display->text() != "") {
         ui->btnClearAll->setText("CE");
@@ -368,7 +368,7 @@ void ScientificCalculator::on_display_textChanged(const QString &arg1)
 void ScientificCalculator::on_btnClearAll_clicked()
 {
     //清楚所有
-    if (operand == "") {
+    if (ui->display->text() == "") {
         code = "";
         operands.clear();
         codes.clear();
@@ -413,8 +413,9 @@ void ScientificCalculator::btnOperatorClicked()
             ui->addDisplay->setText(str.left(str.size() - 1) + tempCode);
     } else {
         //当操作数为空时，不需要将操作数放入栈里
-        if (operand != "")
-            operands.push(operand);
+        if (operand == "")
+            operand = "0";
+        operands.push(operand);
         //当exp操作时，需要先计算
         if (operand.contains('e')) {
             operand = QString::number(operand.toDouble());
@@ -487,11 +488,14 @@ void ScientificCalculator::on_btnEqual_clicked()
         //如果操作符不为空且操作数为空,认定display的数字为操作数
         if (code != "" && operand == "")
             operand = ui->display->text();
-        if (operand != "")
+        if (operand != "") {
             //如果有exp运算，要先运算
             if (operand.contains('e'))
                 operand = QString::number(operand.toDouble());
+        } else
+            operand = "0";
         operands.push(operand);
+
 
         while (!codes.isEmpty()) {     //有操作符时
             result = calculation();
@@ -581,7 +585,7 @@ void ScientificCalculator::keyPressEvent(QKeyEvent *event)
 
 QString ScientificCalculator::calculation()
 {
-    double result;
+    double result = 0;
     QString tempCode = codes.pop();
     double operand1 = operands.pop().toDouble();
     double operand2 = operands.pop().toDouble();
@@ -760,6 +764,8 @@ void ScientificCalculator::triangleCalculate(double &result, QString &op, QStrin
         temp = "coth⁻¹(" + resultString + ")";
         result = atanh(1 / result);
     }
+    //用完就关闭
+    ui->triangleGroupBox->setVisible(false);
 }
 
 void ScientificCalculator::functionCalculate(double &result, QString &op, QString &temp,
@@ -778,6 +784,8 @@ void ScientificCalculator::functionCalculate(double &result, QString &op, QStrin
         temp = "deg(" + resultString + ")";
         result = result * (180.0 / M_PI);
     }
+    //用完就关闭
+    ui->functionGroupBox->setVisible(false);
 }
 
 void ScientificCalculator::standardCalculate(double &result, QString &op, QString &temp,
