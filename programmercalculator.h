@@ -36,6 +36,9 @@ public:
     void setAllDisplay(const QString &str);
     //清楚所有进制
     void clearAllDisplay();
+    //转换进制设置addDisplay
+    QString replaceNumbersWithBase(const QString &input, int fromBase, int ToBase);
+    void setAddDisplay(const QString &str);
 
 
 private:
