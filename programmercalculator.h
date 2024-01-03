@@ -68,6 +68,8 @@ private slots:
     void on_btnBitwise_clicked();
     void on_btnBitShift_clicked();
     void btnBitShiftModeClicked();
+    void on_btnLeftBracket_clicked();
+    void on_btnRightBracket_clicked();
 };
 
 #endif // PROGRAMMERCALCULATOR_H

@@ -164,12 +164,18 @@ QString ProgrammerCalculator::replaceNumbersWithBase(const QString &input, int f
 {
     QString result = input;
     int pos = 0;
-    QString regexPattern = "\\b[0-9A-Fa-f]+\\b"; // 匹配十进制、十六进制数
+    QString regexPattern = "\\b-?[0-9A-Fa-f]+\\b"; // 匹配十进制、十六进制数
 
     while ((pos = result.indexOf(QRegExp(regexPattern), pos)) != -1) {
         bool ok;
         QString numberString = result.mid(pos, result.indexOf(QRegExp("[^0-9A-Fa-f]"),
-                                                              pos) - pos); // 提取数字字符串
+                                                              pos + 1) - pos); // 提取数字字符串
+        //判断是减号还是负号
+        if (numberString.contains("-") && result[pos - 1] != "-") {
+            numberString = numberString.right(numberString.size() - 1);
+            pos = pos + 1;
+        }
+
         int decimalValue = numberString.toInt(&ok, fromBase); // 将字符串转换为整数
 
         if (ok) {
@@ -430,10 +436,11 @@ void ProgrammerCalculator::btnOperatorClicked()
             ui->addDisplay->setText(str.left(str.size() - 1) + tempCode);
     } else {
         //当操作数为空时，不需要将操作数放入栈里
-        if (operand == "")
+        if (operand == "" && ui->addDisplay->text().right(1) != ")")
             operand = "0";
+        if (operand != "" )
+            operands.push(QString::number(operand.toLongLong(nullptr, Base)));
 
-        operands.push(QString::number(operand.toLongLong(nullptr, Base)));
         pushCode(tempCode);
         if (uniOperator == 1)
             ui->addDisplay->setText(ui->addDisplay->text() + tempCode);
@@ -447,8 +454,8 @@ void ProgrammerCalculator::btnOperatorClicked()
 //操作符入栈
 void ProgrammerCalculator::pushCode(const QString &tempCode)
 {
-//    qDebug() << codes;
-//    qDebug() << operands;
+    qDebug() << codes;
+    qDebug() << operands;
     QString result;
     if (tempCode == "×" || tempCode == "÷" || tempCode == "+" || tempCode == "-" || tempCode == "%"
             || tempCode == "Lsh" || tempCode == "Rsh" || tempCode == "AND" || tempCode == "OR"
@@ -479,8 +486,8 @@ void ProgrammerCalculator::pushCode(const QString &tempCode)
         //出栈"("
         codes.pop();
     }
-//    qDebug() << codes;
-//    qDebug() << operands;
+    qDebug() << codes;
+    qDebug() << operands;
 }
 
 //判断优先级
@@ -628,5 +635,43 @@ void ProgrammerCalculator::btnUniOperatorClicked()
     setAllDisplay(operand);
     uniOperator = 1;
 
+}
+
+//左括号
+void ProgrammerCalculator::on_btnLeftBracket_clicked()
+{
+    if (code == "") {        //数字跟括号 直接相乘
+        ui->btnMul->click();
+    }
+    ui->addDisplay->setText(ui->addDisplay->text() + "(");
+    pushCode("(");
+    setAllDisplay("0");
+    operand = "0";
+    Bracket++;
+}
+
+//右括号
+void ProgrammerCalculator::on_btnRightBracket_clicked()
+{
+    //如果没有左括号 就不加右括号
+    if (Bracket == 0) {
+        return;
+    } else {
+        //操作符后面接括号，将显示的当作操作数
+        if (code != "") {
+            qDebug() << "code is not null";
+            operand = ui->display->text();
+            operands.push(operand);
+            pushCode(")");
+            ui->addDisplay->setText(ui->addDisplay->text() + operand.toUpper() + ")");
+        } else {
+            qDebug() << "code is null";
+            operands.push(operand);
+            pushCode(")");
+            ui->addDisplay->setText(ui->addDisplay->text() + operand.toUpper() + ")");
+        }
+        Bracket--;
+        operand = "";
+    }
 }
 
