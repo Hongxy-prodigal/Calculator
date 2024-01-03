@@ -412,15 +412,15 @@ void ScientificCalculator::btnOperatorClicked()
         } else
             ui->addDisplay->setText(str.left(str.size() - 1) + tempCode);
     } else {
-        //当操作数为空时，不需要将操作数放入栈里
+        //当操作数为空时，置0
         if (operand == "")
             operand = "0";
-        operands.push(operand);
         //当exp操作时，需要先计算
         if (operand.contains('e')) {
             operand = QString::number(operand.toDouble());
             ui->display->setText(operand);
         }
+        operands.push(operand);
         pushCode(tempCode);
         if (uniOperator == 1)
             ui->addDisplay->setText(ui->addDisplay->text() + tempCode);

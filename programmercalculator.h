@@ -38,7 +38,7 @@ public:
     void clearAllDisplay();
     //转换进制设置addDisplay
     QString replaceNumbersWithBase(const QString &input, int fromBase, int ToBase);
-    void setAddDisplay(const QString &str);
+    void removeOperand();
 
 
 private:
@@ -46,8 +46,10 @@ private:
 
     int Bracket = 0;            //括号
     int calculated = 0;         //已经将栈里面的内容计算
+    int uniOperator = 0;        //当前的操作数是否已经被但操作数运算了
     int equal = 0;              //是否等号
     int Base = 10;              //当前的进制
+    int bitShiftMode = 1;        //位移位的方式
 
 private slots:
     void btnNumClicked();
@@ -57,6 +59,7 @@ private slots:
     void on_btnClearAll_clicked();
     void on_btnSign_clicked();
     void btnOperatorClicked();
+    void btnUniOperatorClicked();
     void on_btnEqual_clicked();
     void keyPressEvent(QKeyEvent *event);
     void on_display_textChanged();   //变换C CE
@@ -64,6 +67,7 @@ private slots:
 //    void on_btnRightBracket_clicked();
     void on_btnBitwise_clicked();
     void on_btnBitShift_clicked();
+    void btnBitShiftModeClicked();
 };
 
 #endif // PROGRAMMERCALCULATOR_H

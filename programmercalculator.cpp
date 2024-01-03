@@ -50,24 +50,54 @@ ProgrammerCalculator::ProgrammerCalculator(QWidget *parent) :
     connect(ui->btnMod, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
     connect(ui->btnAND, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
     connect(ui->btnOR, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
-    connect(ui->btnNOT, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
     connect(ui->btnNAND, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
     connect(ui->btnNOR, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
     connect(ui->btnXOR, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
     connect(ui->btnLeftShift, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
     connect(ui->btnRightShift, SIGNAL(clicked()), this, SLOT(btnOperatorClicked()));
+    //单操作
+    connect(ui->btnRightShift, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
+    connect(ui->btnLeftShift, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
+    connect(ui->btnNOT, SIGNAL(clicked()), this, SLOT(btnUniOperatorClicked()));
 
     //进制转换
     connect(ui->btnHEX, SIGNAL(clicked()), this, SLOT(btnBaseClicked()));
     connect(ui->btnDEC, SIGNAL(clicked()), this, SLOT(btnBaseClicked()));
     connect(ui->btnOCT, SIGNAL(clicked()), this, SLOT(btnBaseClicked()));
     connect(ui->btnBIN, SIGNAL(clicked()), this, SLOT(btnBaseClicked()));
+
+    //位移位方式转换
+    connect(ui->radioArithmetic, SIGNAL(clicked()), this, SLOT(btnBitShiftModeClicked()));
+    connect(ui->radioLogical, SIGNAL(clicked()), this, SLOT(btnBitShiftModeClicked()));
+    connect(ui->radioRotational, SIGNAL(clicked()), this, SLOT(btnBitShiftModeClicked()));
+    connect(ui->radioCarry, SIGNAL(clicked()), this, SLOT(btnBitShiftModeClicked()));
     ui->btnDEC->click();
 }
 
 ProgrammerCalculator::~ProgrammerCalculator()
 {
     delete ui;
+}
+
+//获取最后一次出现的操作符
+int getLastOperator1(const QString &str)
+{
+    QStringList operators = {"+", "-", "×", "÷", "%", "AND", "OR", "NAND", "NOR", "XOR", "<<", ">>"}; // 所有可能的运算符
+    int index = -1;
+    for (const QString &op : operators) {
+        int temp = str.lastIndexOf(op);
+        index = index >  temp ? index : temp;
+    }
+    return index;
+}
+
+//对应去除
+void ProgrammerCalculator::removeOperand()
+{
+    QString str = ui->addDisplay->text();
+    int index = getLastOperator1(str);
+    str = str.left(index + 1);
+    ui->addDisplay->setText(str);
 }
 
 //进制转换
@@ -105,15 +135,15 @@ void ProgrammerCalculator::btnBaseClicked()
         }
         i++;
     }
-    ui->display->setText(QString::number(ui->display->text().toInt(nullptr, tempBase), Base));
+    ui->display->setText(QString::number(ui->display->text().toInt(nullptr, tempBase), Base).toUpper());
     operand = QString::number(operand.toInt(nullptr, tempBase), Base);
-    ui->addDisplay->setText(replaceNumbersWithBase(ui->addDisplay->text(), tempBase, Base));
+    ui->addDisplay->setText(replaceNumbersWithBase(ui->addDisplay->text(), tempBase, Base).toUpper());
 }
 
 //在所有进制中都要显示
 void ProgrammerCalculator::setAllDisplay(const QString &str)
 {
-    ui->display->setText(str);
+    ui->display->setText(str.toUpper());
     int dec = str.toInt(nullptr, Base);
     ui->lineEditBIN->setText(QString::number(dec, 2));
     ui->lineEditOCT->setText(QString::number(dec, 8));
@@ -151,7 +181,7 @@ QString ProgrammerCalculator::replaceNumbersWithBase(const QString &input, int f
             pos += numberString.length(); // 若无法转换，则移动到下一个位置
         }
     }
-    qDebug() << result;
+//    qDebug() << result;
     return result;
 }
 
@@ -195,6 +225,22 @@ void ProgrammerCalculator::on_btnBitShift_clicked()
     ui->groupBoxBitwise->setVisible(false);
 }
 
+//位移位的单选框
+void ProgrammerCalculator::btnBitShiftModeClicked()
+{
+    QString tempCode = qobject_cast<QRadioButton *>(sender())->text();
+    if (tempCode == "算术移位")
+        bitShiftMode = 1;
+    else if (tempCode == "逻辑移位")
+        bitShiftMode = 2;
+    else if (tempCode == "旋转循环移位")
+        bitShiftMode = 3;
+    else if (tempCode == "带进位旋转循环移位")
+        bitShiftMode = 4;
+    //用完就将其关闭
+    ui->groupBoxShift->setVisible(false);
+}
+
 //数字键
 void ProgrammerCalculator::btnNumClicked()
 {
@@ -212,6 +258,14 @@ void ProgrammerCalculator::btnNumClicked()
         code = "";
         ui->display->setText("");
         operand = "";
+    }
+    //单操作符操作了
+    if (uniOperator == 1) {
+        uniOperator = 0;
+        removeOperand();
+        operand = "";
+        ui->display->setText(operand);
+
     }
     //右括号加数字
     if (ui->addDisplay->text().right(1) == ")") {
@@ -238,11 +292,13 @@ void ProgrammerCalculator::btnNumClicked()
 //删除键 把符号也删了
 void ProgrammerCalculator::on_btnDel_clicked()
 {
-    if (operand != "" && calculated == 0) {
-        operand = operand.left(operand.size() - 1);
-        if (operand == "-")
-            operand = "";
-        setAllDisplay(operand);
+    if (uniOperator != 1) {
+        if (operand != "" && calculated == 0) {
+            operand = operand.left(operand.size() - 1);
+            if (operand == "-")
+                operand = "";
+            setAllDisplay(operand);
+        }
     }
 }
 
@@ -275,7 +331,7 @@ void ProgrammerCalculator::on_btnClearAll_clicked()
 void ProgrammerCalculator::on_btnSign_clicked()
 {
 
-    if (Base == 10) {
+    if (Base == 10 && uniOperator == 0) {
         if (operand != "") {
             if (!operand.contains('-')) {
                 operand = '-' + operand;
@@ -286,19 +342,25 @@ void ProgrammerCalculator::on_btnSign_clicked()
 
         }
     }
-    //如果是除十进制以外的，则要用negate()
+    //如果是除十进制并且未被单操作过的以外的，则要用negate()
     else {
-//        QString str = ui->addDisplay->text();
-//        int index = getLastOperator(str);
-//        QString resultString = str.right(str.size() - index - 1);
-//        str = str.left(index + 1);
-//        resultString = "negate(" + resultString + ")";
-
-//        if (operand == "" && ui->addDisplay->text().right(1) == "=") {
-//            ui->addDisplay->setText(resultString);
-//        } else {
-//            ui->addDisplay->setText(str + resultString);
-//        }
+        QString str = ui->addDisplay->text();
+        int index = getLastOperator1(str);
+        QString resultString;
+        if (uniOperator == 1)
+            resultString = str.right(str.size() - index - 1);
+        else
+            resultString = operand;
+        str = str.left(index + 1);
+        operand = QString::number(-operand.toInt(nullptr, Base), Base);
+        resultString = "negate(" + resultString + ")";
+        if (operand == "" && ui->addDisplay->text().right(1) == "=") {
+            ui->addDisplay->setText(resultString);
+        } else {
+            ui->addDisplay->setText(str + resultString);
+        }
+        setAllDisplay(operand);
+        uniOperator = 1;
     }
 }
 
@@ -320,12 +382,15 @@ void ProgrammerCalculator::on_btnEqual_clicked()
         }
 
         //划等号
-        ui->addDisplay->setText(ui->addDisplay->text() + operand + "=");
-        setAllDisplay(result);
+        if (uniOperator == 1)
+            ui->addDisplay->setText(ui->addDisplay->text() + "=");
+        else
+            ui->addDisplay->setText(ui->addDisplay->text() + operand.toUpper() + "=");
+        setAllDisplay(QString::number(result.toInt(), Base));
         operands.clear();
         codes.clear();
         code = "";
-        operand = result;
+        operand = QString::number(result.toInt(), Base);
         equal = 1;
     }
 }
@@ -336,12 +401,22 @@ void ProgrammerCalculator::btnOperatorClicked()
     QString tempCode = qobject_cast<QPushButton *>(sender())->text();
     if (equal == 1) {
         equal = 0;
-        setAllDisplay("");
+        ui->addDisplay->setText("");
     }
-    if (tempCode == "<<")
-        tempCode = "Lsh";
-    else if (tempCode == ">>")
-        tempCode = "Rsh";
+    if (tempCode == "<<") {
+        if (bitShiftMode == 3 || bitShiftMode == 4)
+            return;
+        else
+            tempCode = "Lsh";
+    } else if (tempCode == ">>") {
+        if (bitShiftMode == 3 || bitShiftMode == 4)
+            return;
+        else
+            tempCode = "Rsh";
+    }
+    if (tempCode == "AND" || tempCode == "OR" || tempCode == "NAND" || tempCode == "NOR"
+            || tempCode == "XOR")
+        ui->groupBoxBitwise->setVisible(false);
     if (code != "") {        //避免多次使用操作符
         QString previousCode = codes.pop();
         pushCode(tempCode);
@@ -357,10 +432,13 @@ void ProgrammerCalculator::btnOperatorClicked()
         //当操作数为空时，不需要将操作数放入栈里
         if (operand == "")
             operand = "0";
-        operands.push(QString::number(operand.toInt(nullptr, Base)));
-        pushCode(tempCode);
 
-        ui->addDisplay->setText(ui->addDisplay->text() + operand + tempCode);
+        operands.push(QString::number(operand.toLongLong(nullptr, Base)));
+        pushCode(tempCode);
+        if (uniOperator == 1)
+            ui->addDisplay->setText(ui->addDisplay->text() + tempCode);
+        else
+            ui->addDisplay->setText(ui->addDisplay->text() + operand + tempCode);
         code = tempCode;
     }
     operand = "";
@@ -369,8 +447,8 @@ void ProgrammerCalculator::btnOperatorClicked()
 //操作符入栈
 void ProgrammerCalculator::pushCode(const QString &tempCode)
 {
-    qDebug() << codes;
-    qDebug() << operands;
+//    qDebug() << codes;
+//    qDebug() << operands;
     QString result;
     if (tempCode == "×" || tempCode == "÷" || tempCode == "+" || tempCode == "-" || tempCode == "%"
             || tempCode == "Lsh" || tempCode == "Rsh" || tempCode == "AND" || tempCode == "OR"
@@ -384,7 +462,7 @@ void ProgrammerCalculator::pushCode(const QString &tempCode)
                     result = calculation();
                     operands.push(result);
                 }
-                setAllDisplay(result);
+                setAllDisplay(QString::number(result.toInt(), Base));
                 calculated = 1;
             }
             codes.push(tempCode);
@@ -397,12 +475,12 @@ void ProgrammerCalculator::pushCode(const QString &tempCode)
             result = calculation();
             operands.push(result);
         }
-        setAllDisplay(result);
+        setAllDisplay(QString::number(result.toInt(), Base));
         //出栈"("
         codes.pop();
     }
-    qDebug() << codes;
-    qDebug() << operands;
+//    qDebug() << codes;
+//    qDebug() << operands;
 }
 
 //判断优先级
@@ -442,9 +520,17 @@ QString ProgrammerCalculator::calculation()
     } else if (tempCode == "XOR") {
         result = operand2 ^ operand1;
     } else if (tempCode == "Lsh") {
-        result = operand2 << operand1;
+        //算术
+        if (bitShiftMode == 1)
+            result = operand2 << operand1;
+        //逻辑
+        else if (bitShiftMode == 2)
+            result = (unsigned)operand2 << (unsigned)operand1;
     }  else if (tempCode == "Rsh") {
-        result = operand2 >> operand1;
+        if (bitShiftMode == 1)
+            result = operand2 >> operand1;
+        else if (bitShiftMode == 2)
+            result = (unsigned)operand2 >> (unsigned)operand1;
     } else if (tempCode == "÷") {
         if (operand2 == 0) {
             operand = "";
@@ -457,31 +543,6 @@ QString ProgrammerCalculator::calculation()
     }
     return QString::number(result);
 }
-//// 算术左移
-//unsigned int arithmeticLeftShift(unsigned int value, unsigned int shift)
-//{
-//    return value << shift;
-//}
-
-//// 逻辑左移
-//unsigned int logicalLeftShift(unsigned int value, unsigned int shift)
-//{
-//    return value << shift;
-//}
-
-//// 循环左移
-//unsigned int rotateLeft(unsigned int value, unsigned int shift)
-//{
-//    return (value << shift) | (value >> (sizeof(value) * CHAR_BIT - shift));
-//}
-
-//// 带进位循环左移
-//unsigned int rotateLeftWithCarry(unsigned int value, unsigned int shift)
-//{
-//    const unsigned int mask = (1u << (sizeof(value) * CHAR_BIT - 1));
-//    return ((value << shift) | (value >> (sizeof(value) * CHAR_BIT - shift))) & (~mask | ((value >>
-//                                                                                           (sizeof(value) * CHAR_BIT - shift)) << 1));
-//}
 
 //键盘事件
 void ProgrammerCalculator::keyPressEvent(QKeyEvent *event)
@@ -498,5 +559,74 @@ void ProgrammerCalculator::keyPressEvent(QKeyEvent *event)
     }
 }
 
+void ProgrammerCalculator::btnUniOperatorClicked()
+{
+    QString op = qobject_cast<QPushButton *>(sender())->text();
+    //这是双操作符
+    if (equal == 1) {
+        equal = 0;
+        ui->addDisplay->setText("");
+    }
+    if (op == "<<") {
+        if (bitShiftMode == 1 || bitShiftMode == 2)
+            return;
+        else
+            op = "ROL";
+    } else if (op == ">>") {
+        if (bitShiftMode == 1 || bitShiftMode == 2)
+            return;
+        else
+            op = "ROR";
+    }
+    QString str = ui->addDisplay->text();
+    QString temp;
+    int result = ui->display->text().toInt();
+    QString resultString;
+    //单操作符叠加处理
+    if (uniOperator == 1) {
+        int index = getLastOperator1(str);
+        resultString = str.right(str.size() - index - 1);
+        str = str.left(index + 1);
+    } else
+        resultString = QString::number(result);
+    if (resultString == "") {
+        resultString = "0";
+        result = 0;
+    }
+    if (op == "NOT") {
+        result = ~result;
+        temp = "NOT(" + resultString + ")";
+        ui->groupBoxBitwise->setVisible(false);
+    } else if (op == "ROL") {
+        if (bitShiftMode == 3)
+            result = (result << 1) | (result >> (sizeof(result) * CHAR_BIT - 1));
+        else {
+            const unsigned int mask = (1u << (sizeof(result) * CHAR_BIT - 1));
+            result = ((result << 1) | (result >> (sizeof(result) * CHAR_BIT - 1))) &
+                     (~mask | ((result >> (sizeof(result) * CHAR_BIT - 1)) << 1));
+        }
+        temp = "ROL(" + resultString + ")";
+        ui->groupBoxShift->setVisible(false);
+    } else if (op == "ROR") {
+        if (bitShiftMode == 3)
+            result = (result >> 1) | (result << (sizeof(result) * CHAR_BIT - 1));
+        else {
+            const unsigned int mask = (1u << (sizeof(result) * CHAR_BIT - 1));
+            result = ((result >> 1) | (result << (sizeof(result) * CHAR_BIT - 1))) &
+                     (~mask | ((result << (sizeof(result) * CHAR_BIT - 1)) >> 1));
+        }
+        temp = "ROR(" + resultString + ")";
+        ui->groupBoxShift->setVisible(false);
+    }
+    //判断当前数字是结果还是操作数
+    if (operand == "" && ui->addDisplay->text().right(1) == "=") {
+        ui->addDisplay->setText(temp);
+    } else {
+        ui->addDisplay->setText(str + temp);
+    }
+    operand = QString::number(result);
+    setAllDisplay(operand);
+    uniOperator = 1;
 
+}
 
