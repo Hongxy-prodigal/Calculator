@@ -23,7 +23,6 @@ public:
     explicit Currency(QWidget *parent = nullptr);
     ~Currency();
     void getCurrencyNumber();
-    void getCurrencyRate();
     void setAllDisplay();
 
 private slots:

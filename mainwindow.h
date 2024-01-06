@@ -7,6 +7,8 @@
 #include <programmercalculator.h>
 #include <datecalculator.h>
 #include <currency.h>
+#include <capacity.h>
+#include <painting.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -37,6 +39,10 @@ private slots:
 
     void on_btnStandard_clicked();
 
+    void on_btnCapacity_clicked();
+
+    void on_pushButton_5_clicked();
+
 private:
     Ui::MainWindow *ui;
     StandardCalculator *standard;
@@ -44,6 +50,8 @@ private:
     ProgrammerCalculator *program;
     DateCalculator *date;
     Currency *currency;
+    Capacity *capacity;
+    Painting *painting;
     void pushWidgetToStackView(QWidget *widget);
 };
 #endif // MAINWINDOW_H

@@ -73,6 +73,18 @@ void MainWindow::on_btnCurrency_clicked()
     pushWidgetToStackView(currency);
 }
 
+void MainWindow::on_btnCapacity_clicked()
+{
+    capacity = new Capacity(this);
+    pushWidgetToStackView(capacity);
+}
 
 
+
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    painting = new Painting(this);
+    pushWidgetToStackView(painting);
+}
 
